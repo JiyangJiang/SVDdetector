@@ -50,7 +50,7 @@ for i = 1 : params.global.numbers.pairedT1Flair
 						 params.global.subjID.pairedT1Flair {i,1}, ...
 						 'wmh', 'scripts', 'cns2_ud.log'));
 
-		% wmh_spmbatchCoregSeg (params, 'paired', i); % FLAIR->T1 coreg + 2-channel seg
+		wmh_spmbatchCoregSeg (params, 'paired', i); % FLAIR->T1 coreg + 2-channel seg
 
 		fprintf ('%s : %s finished without error.\n', mfilename, params.global.subjID.pairedT1Flair {i,1});
 		fprintf ('%s :\n', mfilename);

@@ -48,12 +48,7 @@ matlabbatch{2}.spm.spatial.preproc.tissue(3).ngaus = params.nii.flair.spm.segmen
 matlabbatch{2}.spm.spatial.preproc.tissue(3).native = [1 1];
 matlabbatch{2}.spm.spatial.preproc.tissue(3).warped = [0 0];
 
-% matlabbatch{2}.spm.spatial.preproc.tissue(4).tpm = cellstr('C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\CNS2\templates\DARTEL_TPM\tpm_abnormal_0p07.nii,1');
-% matlabbatch{2}.spm.spatial.preproc.tissue(4).ngaus = params.nii.flair.spm.segment.n_gaussians.wmh;
-% matlabbatch{2}.spm.spatial.preproc.tissue(4).native = [1 1];
-% matlabbatch{2}.spm.spatial.preproc.tissue(4).warped = [0 0];
-
-matlabbatch{2}.spm.spatial.preproc.tissue(4).tpm = cellstr(fullfile (params.global.directories.spm12, 'tpm', 'TPM.nii,2'));
+matlabbatch{2}.spm.spatial.preproc.tissue(4).tpm = cellstr(fullfile (params.global.directories.svdd, 'templates', 'tpm_abnormal_0p07.nii,1'));
 matlabbatch{2}.spm.spatial.preproc.tissue(4).ngaus = params.nii.flair.spm.segment.n_gaussians.wmh;
 matlabbatch{2}.spm.spatial.preproc.tissue(4).native = [1 1];
 matlabbatch{2}.spm.spatial.preproc.tissue(4).warped = [0 0];
