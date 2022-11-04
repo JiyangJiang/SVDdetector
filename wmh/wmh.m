@@ -9,6 +9,8 @@ studyDirectory = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Docum
 flairDistinctIntensityBtwGmWm = true;
 verbose = true;
 
+spm_segment_channels = 'T1+FLAIR';
+
 addpath (genpath (svddDirectory));
 
 wmh_startTime = tic;
@@ -19,8 +21,7 @@ fprintf ('%s : Starting WMH pipeline (%s).\n', mfilename, string(datetime));
 % set parameters
 try
 	global_params (svddDirectory, spm12directory, studyDirectory, verbose);
-	nii_params (flairDistinctIntensityBtwGmWm);
-	wmh_params;
+	wmh_params (spm_segment_channels);
 catch ME
 	fprintf (2,'\nException thrown\n');
 	fprintf (2,'++++++++++++++++++++++\n');
