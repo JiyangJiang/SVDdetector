@@ -7,19 +7,34 @@ wmh_params_startTime = tic;
 fprintf ('%s :\n', mfilename);
 fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
-% How many subj succeeded / failed
-params.wmh.success.pairedT1Flair = cell (params.global.numbers.pairedT1Flair, 2);
-params.wmh.success.t1ButNotFlair = cell (params.global.numbers.t1ButNotFlair, 2);
-params.wmh.success.flairButNotT1 = cell (params.global.numbers.flairButNotT1, 2);
+% How many subj failed
+params.wmh.failure.pairedT1Flair = cell (params.global.numbers.pairedT1Flair, 2);
+params.wmh.failure.t1ButNotFlair = cell (params.global.numbers.t1ButNotFlair, 2);
+params.wmh.failure.flairButNotT1 = cell (params.global.numbers.flairButNotT1, 2);
 
 for i = 1 : params.global.numbers.pairedT1Flair
-	params.wmh.success.pairedT1Flair{i,1} = params.global.subjID.pairedT1Flair {i,1};
+	params.wmh.failure.pairedT1Flair{i,1} = params.global.subjID.pairedT1Flair {i,1};
 end
 for i = 1 : params.global.numbers.t1ButNotFlair
-	params.wmh.success.t1ButNotFlair{i,1} = params.global.subjID.t1ButNotFlair {i,1};
+	params.wmh.failure.t1ButNotFlair{i,1} = params.global.subjID.t1ButNotFlair {i,1};
 end
 for i = 1 : params.global.numbers.flairButNotT1
-	params.wmh.success.flairButNotT1{i,1} = params.global.subjID.flairButNotT1 {i,1};
+	params.wmh.failure.flairButNotT1{i,1} = params.global.subjID.flairButNotT1 {i,1};
+end
+
+% How many subj processed for wmh
+params.wmh.processed.pairedT1Flair = cell (params.global.numbers.pairedT1Flair, 2);
+params.wmh.processed.t1ButNotFlair = cell (params.global.numbers.t1ButNotFlair, 2);
+params.wmh.processed.flairButNotT1 = cell (params.global.numbers.flairButNotT1, 2);
+
+for i = 1 : params.global.numbers.pairedT1Flair
+	params.wmh.processed.pairedT1Flair{i,1} = params.global.subjID.pairedT1Flair {i,1};
+end
+for i = 1 : params.global.numbers.t1ButNotFlair
+	params.wmh.processed.t1ButNotFlair{i,1} = params.global.subjID.t1ButNotFlair {i,1};
+end
+for i = 1 : params.global.numbers.flairButNotT1
+	params.wmh.processed.flairButNotT1{i,1} = params.global.subjID.flairButNotT1 {i,1};
 end
 
 % spm segment settings
@@ -37,7 +52,7 @@ params.wmh.spm.segment.tpm.wmh = fullfile (params.global.directories.svdd, 'temp
 params.wmh.spm.segment.tpm.skull = fullfile (params.global.directories.spm12, 'tpm', 'TPM.nii,4');
 params.wmh.spm.segment.tpm.scalp = fullfile (params.global.directories.spm12, 'tpm', 'TPM.nii,5');
 params.wmh.spm.segment.tpm.background = fullfile (params.global.directories.spm12, 'tpm', 'TPM.nii,6');
-params.wmh.spm.segment.channels = spm_seg_channels; % options : 'T1+FLAIR', 'FLAIR'
+params.wmh.spm.segment.channels = spm_seg_channels; % options : 'T1->FLAIR', 'T1<-FLAIR', 'FLAIR', 'T1'
 
 wmh_params_finishTime = toc (wmh_params_startTime);
 fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), wmh_params_finishTime);
