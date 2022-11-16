@@ -1,9 +1,11 @@
-function [flowMapCellArr,ud2param] = wmh_ud2_crtDartelTemp (ud2param)
+function flowMapCellArr = wmh_ud2_crtDartelTemp (ud2param)
 
-curr_cmd = mfilename;
+wmh_ud2_crtDartelTemp_startTime = tic;
+fprintf ('%s : \n', mfilename);
+fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
 if ud2param.exe.verbose
-    fprintf ('%s : Creating cohort-specific DARTEL template.\n', curr_cmd);
+    fprintf ('%s : Creating cohort-specific DARTEL template.\n', mfilename);
 end
 
 rcGMcellArr_col  = cell (ud2param.n_subjs,1);
@@ -19,29 +21,37 @@ subjs_dir = ud2param.dirs.subjs;
 subjid_arr = ud2param.lists.subjs;
 crtTempFailSeg = cell (ud2param.n_subjs,1);
 
-parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_cpus)
+parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_cpu_cores)
 
-	diary (fullfile (subjs_dir, subjid_arr{i,1}, 'ud', 'scripts', 'cns2_ud.log'))
+	diary (fullfile (subjs_dir, subjid_arr{i,1}, 'ud2', 'scripts', 'wmh_ud2.log'))
 
-	temp = [];
-	temp.exe.verbose = true;
-	% t1 = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud', 'preproc', 't1.nii');
-	% t1 = fullfile (temp.dirs.subjs, temp.lists.subjs{i,1}, 'ud', 'preproc', 't1.nii');
-	t1 = fullfile (subjs_dir, subjid_arr{i,1}, 'ud', 'preproc', 't1.nii');
+	t1 = fullfile (subjs_dir, subjid_arr{i,1}, 'ud2', 'preproc', 't1.nii');
 
 	try
 		% t1 segmentation
 		% ===============
-		[cGM,cWM,cCSF,rcGM,rcWM,rcCSF] = cns2_spmbatch_segmentation (temp, t1);
+		if ud2param.exe.verbose
+			fprintf ('%s : Calling wmh_ud2_spmbatch_segmentation for tissue segmentation on %s''s T1.\n', mfilename, subjid_arr{i,1});
+		end
+		[cGM,cWM,cCSF,rcGM,rcWM,rcCSF] = wmh_ud2_spmbatch_segmentation (ud2param, t1);
 
 	catch ME
 
-		fprintf (2,'\nException thrown\n');
-		fprintf (2,'++++++++++++++++++++++\n');
+		fprintf (2,'\n%s : Exception thrown during calling wmh_ud2_spmbatch_segmentation for tissue segmentation.\n', mfilename);
 		fprintf (2,'identifier: %s\n', ME.identifier);
-		fprintf (2,'message: %s\n\n', ME.message);
+		fprintf (2,'message: %s\n', ME.message);
+		fprintf (2,'stack: a stack of %d functions threw exceptions.\n', size(ME.stack,1));
+		for k = 1:size(ME.stack,1)
+			if isfile (ME.stack(k).file)
+				code = readlines (ME.stack(k).file);
+				fprintf (2, 'exception #%d in line %d of %s ( ==> %s <== ).\n', k, ME.stack(k).line, ME.stack(k).name, strtrim(code(ME.stack(k).line)));
+			elseif strcmp (ME.stack(k).name, 'MATLABbatch system')
+				fprintf (2, 'exception #%d is from MATLAB batch system, most likely caused by failure in running SPM functions.\n', k);
+			end
+		end
 
-		fprintf ('%s : %s'' T1 failed segmentation therefore was excluded from creating cohort-specific templates.\n\n', curr_cmd, subjid_arr{i,1});
+		fprintf ('%s :\n', mfilename);
+		fprintf ('%s : %s'' T1 failed segmentation therefore was excluded from creating cohort-specific templates.\n\n', mfilename, subjid_arr{i,1});
 
 		rcGMcellArr_col{i,1}  = 'N/A';
 		rcWMcellArr_col{i,1}  = 'N/A';
@@ -87,11 +97,10 @@ cCSFcellArr_col_noFail  = cCSFcellArr_col  (~strcmp(cCSFcellArr_col, 'N/A'));
           temp3,...
           temp4,...
           temp5,...
-          temp6]    = cns2_spmbatch_runDARTELc (ud2param, ...
-                                                size(rcGMcellArr_col_noFail,1), ...
-                                                rcGMcellArr_col_noFail, ...
-                                                rcWMcellArr_col_noFail, ...
-                                                rcCSFcellArr_col_noFail);
+          temp6]    = wmh_ud2_spmbatch_runDARTELc (ud2param,...
+          																					rcGMcellArr_col_noFail, ...
+		                                                rcWMcellArr_col_noFail, ...
+		                                                rcCSFcellArr_col_noFail);
 
 coh_temp_dir = fullfile(ud2param.dirs.subjs,'coh_temp');
 
@@ -118,7 +127,7 @@ wcGMcellArr  = cell (size(cGMcellArr_col_noFail));
 wcWMcellArr  = cell (size(cWMcellArr_col_noFail));
 wcCSFcellArr = cell (size(cCSFcellArr_col_noFail));
 
-parfor (i = 1 : size(cGMcellArr_col_noFail,1), ud2param.exe.n_cpus)
+parfor (i = 1 : size(cGMcellArr_col_noFail,1), ud2param.exe.n_cpu_cores)
 	temp = [];
 	temp.exe.verbose = true;
 	wcGMcellArr{i,1}  = cns2_spmbatch_nativeToDARTEL (temp, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
@@ -127,19 +136,21 @@ parfor (i = 1 : size(cGMcellArr_col_noFail,1), ud2param.exe.n_cpus)
 end
 
 GMavg  = cns2_spmbatch_imgCal   (ud2param, ...
-								 'avg', ...
+																 'avg', ...
                                  coh_temp_dir, ...
                                  'coh_GMprob', ...
                                  size(wcGMcellArr,1), ...
                                  wcGMcellArr);
+
 WMavg  = cns2_spmbatch_imgCal   (ud2param, ...
-								 'avg', ...
+																 'avg', ...
                                  coh_temp_dir, ...
                                  'coh_WMprob', ...
                                  size(wcWMcellArr,1), ...
                                  wcWMcellArr);
+
 CSFavg = cns2_spmbatch_imgCal   (ud2param, ...
-								 'avg', ...
+																 'avg', ...
                                  coh_temp_dir, ...
                                  'coh_CSFprob', ...
                                  size(wcCSFcellArr,1), ...
@@ -148,3 +159,7 @@ CSFavg = cns2_spmbatch_imgCal   (ud2param, ...
 ud2param.templates.gmprob  = GMavg;
 ud2param.templates.wmprob  = WMavg;
 ud2param.templates.csfprob = CSFavg;
+
+wmh_ud2_crtDartelTemp_finishTime = toc (wmh_ud2_crtDartelTemp_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), wmh_ud2_crtDartelTemp_finishTime);
+fprintf ('%s : \n', mfilename);

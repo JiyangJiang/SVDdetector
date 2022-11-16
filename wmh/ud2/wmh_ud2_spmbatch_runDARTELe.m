@@ -1,6 +1,6 @@
 
 %-------------------------
-% cns2_spmbatch_runDARTELe
+% wmh_ud2_spmbatch_runDARTELe
 %-------------------------
 % DESCRIPTION:
 %   run DARTEL with existing template (run one subject at a time)
@@ -15,18 +15,18 @@
 %   flowMap = path to flow map
 %
 % USAGE:
-%   flowMap = cns2_spmbatch_runDARTELe (rcGM, rcWM, rcCSF, ...
+%   flowMap = ud2_spmbatch_runDARTELe (rcGM, rcWM, rcCSF, ...
 %                              template1, template2, template3, template4, template5, template6)
 % NOTE:
 %   need to run CNSP_segmentation to generate rcGM, rcWM, and rcCSF
 %
 
 
-function flowMap = cns2_spmbatch_runDARTELe (cns2param, ...
+function flowMap = wmh_ud2_spmbatch_runDARTELe (ud2param, ...
                                              rcGM, rcWM, rcCSF, ...
                                              template1, template2, template3, template4, template5, template6)
 
-    cns2_spmbatch_runDARTELe_startTime = tic;
+    ud2_spmbatch_runDARTELe_startTime = tic;
 
     fprintf ('%s :\n', mfilename);
     fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
@@ -74,12 +74,12 @@ function flowMap = cns2_spmbatch_runDARTELe (cns2param, ...
     [rcGMfolder,rcGMfilename,rcGMext] = fileparts(rcGM);
     flowMap = fullfile (rcGMfolder, ['u_' rcGMfilename rcGMext]);
 
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Flowmap is %s.\n', mfilename, flowMap);
     end
 
-    cns2_spmbatch_runDARTELe_finishTime = toc (cns2_spmbatch_runDARTELe_startTime);
-    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmbatch_runDARTELe_finishTime);
+    ud2_spmbatch_runDARTELe_finishTime = toc (ud2_spmbatch_runDARTELe_startTime);
+    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmbatch_runDARTELe_finishTime);
     fprintf ('%s :\n');
     
     

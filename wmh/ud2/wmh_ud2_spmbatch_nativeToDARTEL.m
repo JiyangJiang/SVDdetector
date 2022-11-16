@@ -1,6 +1,3 @@
-%-----------------
-% CNSP_mapToDARTEL
-%-----------------
 %
 % DESCRIPTION:
 %   To map image to DARTEL space
@@ -14,15 +11,15 @@
 %   srcImgOnDARTEL = srcImg mapped to DARTEL space
 %
 % USAGE:
-%   srcImgOnDARTEL = cns2_spmbatch_nativeToDARTEL (srcImg, flowMap)
+%   srcImgOnDARTEL = wmh_ud2_spmbatch_nativeToDARTEL (srcImg, flowMap)
 %
 % NOTE:
 %   need to run CNSP_runDARTELe or CNSP_runDARTELc to generate flow map
 %
 
-function srcImgOnDARTEL = cns2_spmbatch_nativeToDARTEL (cns2param, srcImg, flowMap, varargin)
+function srcImgOnDARTEL = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, srcImg, flowMap, varargin)
 
-    cns2_spmbatch_nativeToDARTEL_startTime = tic;
+    ud2_spmbatch_nativeToDARTEL_startTime = tic;
 
     fprintf ('%s :\n', mfilename);
     fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
@@ -30,7 +27,7 @@ function srcImgOnDARTEL = cns2_spmbatch_nativeToDARTEL (cns2param, srcImg, flowM
     [flowMapFolder,flowMapFilename,flowMapExt] = fileparts (flowMap);
     [srcImgFolder,srcImgFilename,srcImgExt] = fileparts (srcImg);
 
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Warping %s to DARTEL space with %s.\n', mfilename, srcImgFilename, flowMapFilename);
     end
     
@@ -38,18 +35,18 @@ function srcImgOnDARTEL = cns2_spmbatch_nativeToDARTEL (cns2param, srcImg, flowM
         switch varargin{1}
             case 'Trilinear'
                 interpCode = 1;
-                if cns2param.exe.verbose
+                if ud2param.exe.verbose
                     fprintf ('%s : Using trilinear interpolation.\n', mfilename);
                 end
             case 'NN'
                 interpCode = 0;
-                if cns2param.exe.verbose
+                if ud2param.exe.verbose
                     fprintf ('%s : Using nearest-neighbour interpolation.\n', mfilename);
                 end
         end
     elseif nargin == 3
         interpCode = 1;
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : Using trilinear interpolation.\n', mfilename);
         end
     end
@@ -71,10 +68,10 @@ function srcImgOnDARTEL = cns2_spmbatch_nativeToDARTEL (cns2param, srcImg, flowM
     
     srcImgOnDARTEL = fullfile (flowMapFolder, ['w' srcImgFilename srcImgExt]);
 
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Finished warping. Warped image is %s.\n', mfilename, srcImgOnDARTEL);
     end
 
-    cns2_spmbatch_nativeToDARTEL_finishTime = toc (cns2_spmbatch_nativeToDARTEL_startTime);
-    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmbatch_nativeToDARTEL_finishTime);
+    ud2_spmbatch_nativeToDARTEL_finishTime = toc (ud2_spmbatch_nativeToDARTEL_startTime);
+    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmbatch_nativeToDARTEL_finishTime);
     fprintf ('%s :\n', mfilename);

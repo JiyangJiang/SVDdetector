@@ -6,14 +6,14 @@
 % 	mask = path to mask nii
 % 	out = path to out nii
 
-function cns2_spmscripts_mask (cns2param, in, mask, out)
+function wmh_ud2_spmscripts_mask (ud2param, in, mask, out)
 
-cns2_spmscripts_mask_startTime = tic;
+ud2_spmscripts_mask_startTime = tic;
 
 fprintf ('%s :\n', mfilename);
 fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
-if cns2param.exe.verbose
+if ud2param.exe.verbose
 	fprintf ('%s : Masking %s with %s, and outputing as %s\n', mfilename, in, mask, out);
 end
 
@@ -30,12 +30,12 @@ end
 out_dat = in_dat;
 out_dat (mask_dat <= 0) = 0;
 
-if cns2param.exe.verbose
+if ud2param.exe.verbose
 	fprintf ('%s : Writing masked image (%s) to nifti.\n', mfilename, out);
 end
 
-cns2_scripts_writeNii (cns2param, spm_vol(in), out_dat, out);
+ud2_scripts_writeNii (ud2param, spm_vol(in), out_dat, out);
 
-cns2_spmscripts_mask_finishTime = toc (cns2_spmscripts_mask_startTime);
-fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmscripts_mask_finishTime);
+ud2_spmscripts_mask_finishTime = toc (ud2_spmscripts_mask_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmscripts_mask_finishTime);
 fprintf ('%s :\n', mfilename);

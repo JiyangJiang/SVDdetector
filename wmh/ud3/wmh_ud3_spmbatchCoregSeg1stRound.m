@@ -1,4 +1,6 @@
-function wmh_ud3_spmbatchCoregSeg1stRound (ud3param, list, i)
+function wmh_ud3_spmbatchCoregSeg1stRound (list, i)
+
+global ud3param
 
 switch list
     case 'paired'

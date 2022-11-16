@@ -1,50 +1,28 @@
-%----------------
-% CNSP_runDARTELc
-%----------------
 %
 % DESCRIPTION:
 %   creating template DARTEL run
-%
-% INPUT:
-%   N = number of subjects
-%
-%   for i = 0:(N-1)
-%       varargin{i*3+1} = path to rcGM
-%       varargin{i*3+2} = path to rcWM
-%       varargin{i*3+3} = path to rcCSF
-%
+
 % OUTPUT:
 %   flowMap = cell array containing path to each subject's flow map
 %   varargout {1:7} = Template_{0-6}.nii
 %
-% USAGE:
-%   flowMapCellArr = cns2_spmbatch_runDARTELc  (cns2param,...
-%                                               N,...
-%                                               rcGMcellArr_col,...
-%                                               rcWMcellArr_col,...
-%                                               rcCSFcellArr_col);
-%
-%   [flowMapCellArr,T0,T1,T2,T3,T4,T5,T6] = cns2_spmbatch_runDARTELc   (cns2param,...
-%                                                                       N,...
-%                                                                       rcGMcellArr_col,...
-%                                                                       rcWMcellArr_col,...
-%                                                                       rcCSFcellArr_col);
-%
-% NOTE:
-%   need to run CNSP_segmentation to generate rcGM, rcWM, and rcCSF
-%
 
 
-
-function [flowMapCellArr,varargout] = cns2_spmbatch_runDARTELc (cns2param, ...
-                                                                N, ...
-                                                                rcGMcellArr_col, ...
-                                                                rcWMcellArr_col, ...
-                                                                rcCSFcellArr_col)
+function [flowMapCellArr,varargout] = wmh_ud2_spmbatch_runDARTELc (ud2param, ...
+                                                                    rcGMcellArr_col, ...
+                                                                    rcWMcellArr_col, ...
+                                                                    rcCSFcellArr_col)
     
-    if cns2param.exe.verbose
-        curr_cmd = mfilename;
-        fprintf ('%s : running DARTEL with existing templates.\n', curr_cmd);
+    if (size(rcGMcellArr_col,1) == size(rcWMcellArr_col,1)) && ...
+        (size(rcWMcellArr_col,1) == size(rcCSFcellArr_col,1))
+        N = size(rcGMcellArr_col,1);
+    else
+        ME = MException ('wmh_ud2_spmbatch_runDARTELc:unequalArraySizes',...
+                            '%s : rcGM, rcWM, rcCSF arrays are not of the same size.\n', mfilename);
+    end
+
+    if ud2param.exe.verbose
+        fprintf ('%s : Creating templates.\n', mfilename);
     end
     
     %% SPM

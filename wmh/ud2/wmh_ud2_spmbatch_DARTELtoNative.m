@@ -1,6 +1,3 @@
-%--------------------
-% CNSP_DARTELtoNative
-%--------------------
 %
 % DESCRIPTION:
 %   inverse transfer image from DARTEL space back to native space
@@ -13,15 +10,12 @@
 %
 % OUTPUT:
 %   NativeImg = DARTELimg on native space
-%
-% USAGE:
-%   NativeImg = CNSP_DARTELtoNative (DARTELimg, flowMap)
-%
+
 
  
-function NativeImg = cns2_spmbatch_DARTELtoNative (cns2param, DARTELimg, flowMap, varargin)
+function NativeImg = wmh_ud2_spmbatch_DARTELtoNative (ud2param, DARTELimg, flowMap, varargin)
 
-    cns2_spmbatch_DARTELtoNative_startTime = tic;
+    ud2_spmbatch_DARTELtoNative_startTime = tic;
 
     fprintf ('%s :\n', mfilename);
     fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
@@ -29,7 +23,7 @@ function NativeImg = cns2_spmbatch_DARTELtoNative (cns2param, DARTELimg, flowMap
     [dartelImgFolder, dartelImgFilename, dartelImgExt] = fileparts (DARTELimg);
     [flowMapFolder, flowMapFilename, flowMapExt] = fileparts (flowMap);
 
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Warping %s to native space with %s.\n', mfilename, DARTELimg, flowMap);
     end
     
@@ -37,7 +31,7 @@ function NativeImg = cns2_spmbatch_DARTELtoNative (cns2param, DARTELimg, flowMap
         
         interp = 0;
 
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : Using nearest-neighbour interpolation.\n', mfilename);
         end
 
@@ -45,7 +39,7 @@ function NativeImg = cns2_spmbatch_DARTELtoNative (cns2param, DARTELimg, flowMap
 
         interp = 1;
 
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : Using trilinear interpolation.\n', mfilename);
         end
 
@@ -65,10 +59,10 @@ function NativeImg = cns2_spmbatch_DARTELtoNative (cns2param, DARTELimg, flowMap
     movefile (NativeImg,fullfile(flowMapFolder,[dartelImgFilename '_native.nii']));
     NativeImg = fullfile (flowMapFolder, [dartelImgFilename '_native.nii']);
 
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Finished warping. Warped image is %s.\n', mfilename, NativeImg);
     end
 
-    cns2_spmbatch_DARTELtoNative_finishTime = toc (cns2_spmbatch_DARTELtoNative_startTime);
-    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmbatch_DARTELtoNative_finishTime);
+    ud2_spmbatch_DARTELtoNative_finishTime = toc (ud2_spmbatch_DARTELtoNative_startTime);
+    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmbatch_DARTELtoNative_finishTime);
     fprintf ('%s :\n', mfilename);

@@ -3,14 +3,14 @@
 %   img2reslice = image to reslice to ref.
 %   interp = interpolation method (B-spline interpolation value; 0 - NN; 1 - trilinear)
 
-function resliced_image = cns2_spmscripts_reslice (cns2param, ref, img2reslice, interp)
+function resliced_image = wmh_ud2_spmscripts_reslice (ud2param, ref, img2reslice, interp)
 
-	cns2_spmscripts_reslice_startTime = tic;
+	ud2_spmscripts_reslice_startTime = tic;
 
 	fprintf ('%s :\n', mfilename);
 	fprintf ('%s : Started (%s).', mfilename, string(datetime));
 
-	if cns2param.exe.verbose
+	if ud2param.exe.verbose
 		switch interp
 		case 0
 			interpMethod = 'nearest neighbour';
@@ -35,10 +35,10 @@ function resliced_image = cns2_spmscripts_reslice (cns2param, ref, img2reslice, 
 
 	resliced_image = fullfile(img2reslice_dir, ['r' img2reslice_filename img2reslice_ext]);
 
-	if cns2param.exe.verbose
+	if ud2param.exe.verbose
 		fprintf ('%s : Reslicing finished. Resliced image is %s.\n', resliced_image);
 	end
 
-	cns2_spmscripts_reslice_finishTime = toc (cns2_spmscripts_reslice_startTime);
-	fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmscripts_reslice_finishTime);
+	ud2_spmscripts_reslice_finishTime = toc (ud2_spmscripts_reslice_startTime);
+	fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmscripts_reslice_finishTime);
 	fprintf ('%s :\n', mfilename);

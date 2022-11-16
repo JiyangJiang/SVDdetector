@@ -1,6 +1,3 @@
-%------------
-% CNSP_imgCal
-%------------
 %
 % INPUT:
 %   calType = 'sum', 'avg',
@@ -16,9 +13,9 @@
 % 	Do not include extension in outputFilename
 %
 
-function outputImg = cns2_spmbatch_imgCal (cns2param, calType, outputDir, outputFilename, N, inputCellArr_col)
+function outputImg = wmh_ud2_spmbatch_imgCal (ud2param, calType, outputDir, outputFilename, N, inputCellArr_col)
 
-if cns2param.exe.verbose
+if ud2param.exe.verbose
     curr_cmd = mfilename;
     fprintf ('%s : %s images.\n', curr_cmd, calType);
 end
@@ -54,7 +51,7 @@ switch calType
         end
         
     otherwise
-        error (['No calculation type ' calType ' defined in cns2_spmbatch_imgCal.']);
+        error (['No calculation type ' calType ' defined in ud2_spmbatch_imgCal.']);
 end
 
 matlabbatch{1}.spm.util.imcalc.input = inputCellArr_col;

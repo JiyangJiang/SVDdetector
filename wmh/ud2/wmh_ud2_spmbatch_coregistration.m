@@ -1,5 +1,5 @@
 % -----------------------------
-% cns2_spmbatch_coregistration
+% wmh_ud2_spmbatch_coregistration
 % -----------------------------
 %
 % DESCRIPTION:
@@ -13,12 +13,12 @@
 %   varargin{3} = interpolation ('NN' or 'Tri')
 % 
 % USAGE:
-%   rFLAIR = cns2_spmbatch_coregistration (FLAIR,T1,'/home/ABC');
+%   rFLAIR = ud2_spmbatch_coregistration (FLAIR,T1,'/home/ABC');
 %
 
-function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outputFolder, varargin)
+function rSrcImg = wmh_ud2_spmbatch_coregistration (ud2param, srcImg, refImg, outputFolder, varargin)
 
-    cns2_spmbatch_coregistration_startTime = tic;
+    ud2_spmbatch_coregistration_startTime = tic;
     fprintf ('%s :\n', mfilename);
     fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
@@ -30,7 +30,7 @@ function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outp
     if (nargin == 6) && strcmp(varargin{2}, 'NN')
         interp = 0;
         otherImg = varargin{1};
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : %s will be registered to %s, and the same transformation will be applied to %s to bring it to %s space using nearest-neighbour interpolation.\n', mfilename, ...
                                                                                                                                                                             srcImg, ...
                                                                                                                                                                             refImg, ...
@@ -40,7 +40,7 @@ function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outp
     elseif (nargin == 6) && strcmp(varargin{2}, 'Tri')
         interp = 1;
         otherImg = varargin{1};
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : %s will be registered to %s, and the same transformation will be applied to %s to bring it to %s space using trilinear interpolation.\n', mfilename, ...
                                                                                                                                                                     srcImg, ...
                                                                                                                                                                     refImg, ...
@@ -49,7 +49,7 @@ function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outp
         end
     elseif nargin == 5
         otherImg = varargin{1};
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : %s will be registered to %s, and the same transformation will be applied to %s to bring it to %s space using 4th degree B-spline interpolation.\n', mfilename, ...
                                                                                                                                                                                 srcImg, ...
                                                                                                                                                                                 refImg, ...
@@ -58,7 +58,7 @@ function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outp
         end
     elseif nargin == 4
         otherImg = '';
-         if cns2param.exe.verbose
+         if ud2param.exe.verbose
             fprintf ('%s : %s will be registered to %s, using 4th degree B-spline.\n', mfilename, srcImg, refImg);
         end
     end
@@ -84,7 +84,7 @@ function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outp
 
     % move coregistered source image to outputFolder
     if ~strcmp (outputFolder, 'same_dir')
-        if cns2param.exe.verbose
+        if ud2param.exe.verbose
             fprintf ('%s : Moving coregisered image to %s.\n', mfilename, outputFolder);
         end
         movefile (fullfile (srcImgParentFolder, ['r' srcImgFilename srcImgExt]), outputFolder);
@@ -92,10 +92,10 @@ function rSrcImg = cns2_spmbatch_coregistration (cns2param, srcImg, refImg, outp
     else
         rSrcImg = fullfile (srcImgParentFolder, ['r' srcImgFilename srcImgExt]);
     end
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Registered image is %s.\n', mfilename, rSrcImg);
     end
 
-    cns2_spmbatch_coregistration_finishTime = toc (cns2_spmbatch_coregistration_startTime);
-    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmbatch_coregistration_finishTime);
+    ud2_spmbatch_coregistration_finishTime = toc (ud2_spmbatch_coregistration_startTime);
+    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmbatch_coregistration_finishTime);
     fprintf ('%s :\n', mfilename);

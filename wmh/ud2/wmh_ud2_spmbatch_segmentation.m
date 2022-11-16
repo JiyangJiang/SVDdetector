@@ -1,5 +1,5 @@
 %---------------------------
-% cns2_spmbatch_segmentation
+% wmh_ud2_spmbatch_segmentation
 %---------------------------
 %
 % DESCRIPTION:
@@ -18,22 +18,22 @@
 %   varargout{1} = *_seg8.mat
 %
 % USAGE:
-%   [cGM,cWM,cCSF,rcGM,rcWM,rcCSF] = cns2_spmbatch_segmentation (inputImg)
-%   [cGM,cWM,cCSF,rcGM,rcWM,rcCSF,seg8mat] = cns2_spmbatch_segmentation (inputImg)
+%   [cGM,cWM,cCSF,rcGM,rcWM,rcCSF] = ud2_spmbatch_segmentation (inputImg)
+%   [cGM,cWM,cCSF,rcGM,rcWM,rcCSF,seg8mat] = ud2_spmbatch_segmentation (inputImg)
 %
 
-function [cGM,cWM,cCSF,rcGM,rcWM,rcCSF,varargout] = cns2_spmbatch_segmentation (cns2param, inputImg)
+function [cGM,cWM,cCSF,rcGM,rcWM,rcCSF,varargout] = wmh_ud2_spmbatch_segmentation (ud2param, inputImg)
 
-    cns2_spmbatch_segmentation_startTime = tic;
+    ud2_spmbatch_segmentation_startTime = tic;
     fprintf ('%s :\n', mfilename);
     fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
     [inputImgFolder,inputImgFilename,inputImgExt] = fileparts(inputImg);
 
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : Running tissue segmentation for %s.\n', mfilename, inputImg);
     end
-
+    
     spm12path = spm ('Dir');
 
     clear matlabbatch;
@@ -98,7 +98,7 @@ function [cGM,cWM,cCSF,rcGM,rcWM,rcCSF,varargout] = cns2_spmbatch_segmentation (
     
     varargout{1} = fullfile (inputImgFolder, [inputImgFilename '_seg8.mat']);
     
-    if cns2param.exe.verbose
+    if ud2param.exe.verbose
         fprintf ('%s : GM  probability map is %s.\n', mfilename, cGM);
         fprintf ('%s : WM  probability map is %s.\n', mfilename, cWM);
         fprintf ('%s : CSF probability map is %s.\n', mfilename, cCSF);
@@ -106,7 +106,7 @@ function [cGM,cWM,cCSF,rcGM,rcWM,rcCSF,varargout] = cns2_spmbatch_segmentation (
         fprintf ('%s : Resliced WM  probability map is %s.\n', mfilename, rcWM);
         fprintf ('%s : Resliced CSF probability map is %s.\n', mfilename, rcCSF);
     end
-
-    cns2_spmbatch_segmentation_finishTime = toc (cns2_spmbatch_segmentation_startTime);
-    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), cns2_spmbatch_segmentation_finishTime);
+    
+    ud2_spmbatch_segmentation_finishTime = toc (ud2_spmbatch_segmentation_startTime);
+    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmbatch_segmentation_finishTime);
     fprintf ('%s :\n', mfilename);

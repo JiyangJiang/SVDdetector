@@ -5,13 +5,13 @@
 % varargin{1} = 'Tri' for trilinear interpolation. Default is nearest neighbour.
 
 
-function varargout = cns2_scripts_revReg (cns2param, src, ref, other, varargin)
+function varargout = wmh_ud2_scripts_revReg (ud2param, src, ref, other, varargin)
 
 	[src_dir,   src_filename,   src_ext  ] = fileparts (src);
 	[ref_dir,   ref_filename,   ref_ext  ] = fileparts (ref);
 	[other_dir, other_filename, other_ext] = fileparts (other);
 
-	if cns2param.exe.verbose
+	if ud2param.exe.verbose
         curr_cmd = mfilename;
         fprintf ('%s : transforming %s to %s''s space by reversing %s-to-%s transformation.\n', ...
         			curr_cmd, other_filename, src_filename, src_filename, ref_filename);

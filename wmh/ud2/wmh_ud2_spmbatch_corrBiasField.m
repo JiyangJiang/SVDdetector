@@ -1,6 +1,6 @@
-function cns2_spmbatch_corrBiasField (cns2param, in)
+function wmh_ud2_spmbatch_corrBiasField (ud2param, in)
 
-if cns2param.exe.verbose
+if ud2param.exe.verbose
 	curr_cmd = mfilename;
 	fprintf ('%s : correcting bias field for %s.\n', curr_cmd, in);
 end

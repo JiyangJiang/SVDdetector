@@ -49,7 +49,7 @@ for i = 2 : 2
 
 	try
 
-		wmh_ud3_initFilesDirs (ud3param, 'paired', i); % initialise folders and copy files
+		wmh_ud3_initFilesDirs ('paired', i); % initialise folders and copy files
 
 		diary (fullfile (ud3param.global.directories.subjects, ...
 						 ud3param.global.subjID.pairedT1Flair {i,1}, ...

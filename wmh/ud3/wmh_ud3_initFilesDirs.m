@@ -1,6 +1,8 @@
-function wmh_ud3_initFilesDirs (ud3param, list, i)
+function wmh_ud3_initFilesDirs (list, i)
 
 wmh_initFilesDirs_startTime = tic;
+
+global ud3param
 
 switch list
 	case 'paired'
