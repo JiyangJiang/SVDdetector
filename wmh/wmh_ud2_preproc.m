@@ -12,7 +12,7 @@ if ud2param.exe.verbose
 	fprintf ('%s : Start preprocessing %s.\n', mfilename, ud2param.lists.subjs{i,1});
 end
 
-switch ud2param.ud.classification.ext_space
+switch ud2param.classification.ext_space
 
 	case 'dartel'
 
@@ -69,7 +69,7 @@ switch ud2param.ud.classification.ext_space
 					fprintf ('%s : Calling wmh_ud2_preproc_native for preprocessing.\n', mfilename);
 				end
 
-				wmh_ud2_preproc_native ('cns2_ud',ud2param,i);
+				wmh_ud2_preproc_native ('ud2',ud2param,i);
 
 			case 'creating'
 
@@ -87,7 +87,7 @@ switch ud2param.ud.classification.ext_space
 						fprintf ('%s : Calling wmh_ud2_preproc_native for preprocessing.\n', mfilename);
 					end
 
-					wmh_ud2_preproc_native ('cns2_ud',ud2param,i,flowmaps);
+					wmh_ud2_preproc_native ('ud2',ud2param,i,flowmaps);
 
 				else
 

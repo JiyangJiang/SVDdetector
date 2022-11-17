@@ -16,7 +16,7 @@ else
 	end
 end
 
-parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_cpu_cores)
+parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 
 	subjsdir = ud2param.dirs.subjs;
 	subjid   = ud2param.lists.subjs{i,1};

@@ -1,5 +1,5 @@
 function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
-					n_cpu_cores, save_dskspc, save_more_dskspc, verbose, temp_opt, ...
+					n_workers, save_dskspc, save_more_dskspc, verbose, temp_opt, ...
 						lv1clstMethod, k4kmeans, k4knn, n4superpixel, probthr, extSpace, pvmag, sizthr_mm3)
 
 	ud2_dir = fullfile(svdd_dir,'wmh','ud2');
@@ -15,7 +15,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 		ud2param = wmh_ud2_param_global  (study_dir, ...
 								             ud2_dir, ...
 								             spm_dir, ...
-								             n_cpu_cores, ...
+								             n_workers, ...
 								             save_dskspc, ...
 								             save_more_dskspc, ...
 								             verbose, ...
@@ -49,58 +49,57 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 		% % for parfor
 		% subjs_list = ud2param.lists.subjs;
 
-		% % parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_cpu_cores)
-		% % for i = 1 : ud2param.n_subjs
-		% for i = 1:1
+		% parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
+		parfor (i = 1:1, ud2param.exe.n_workers)
 			
-		% 	diary (fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud', 'scripts', 'wmh_ud2.log'));
+			diary (fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'scripts', 'wmh_ud2.log'));
 
-		% 	try
+			try
 
-		% 		switch ud2param.templates.options{1}
-		% 		    case 'existing'
-		% 		    	wmh_ud2_preproc (ud2param,i);           	 % preprocessing (existing templates)
-		% 			case 'creating'
-		% 				if ~ismember (ud2param.lists.subjs{i,1},ud2param.lists.crtTempFailSeg)
-		% 					wmh_ud2_preproc (ud2param,i,flowmaps);  % preprocessing (creating templates - 
-		% 																 % flowmaps are generated during creating
-		% 																 % templates).
-		% 				else
-		% 					ME = MException ('ud2:ud:crtTempFailSeg', ...
-		% 					 '%s failed segmentation during creating templates.', ud2param.lists.subjs{i,1});
-		% 					throw (ME);
-		% 				end
-		% 		end
+				switch ud2param.templates.options{1}
+				    case 'existing'
+				    	wmh_ud2_preproc (ud2param,i);           	 % preprocessing (existing templates)
+					case 'creating'
+						if ~ismember (ud2param.lists.subjs{i,1},ud2param.lists.crtTempFailSeg)
+							wmh_ud2_preproc (ud2param,i,flowmaps);  % preprocessing (creating templates - 
+																		 % flowmaps are generated during creating
+																		 % templates).
+						else
+							ME = MException ('ud2:ud:crtTempFailSeg', ...
+							 '%s failed segmentation during creating templates.', ud2param.lists.subjs{i,1});
+							throw (ME);
+						end
+				end
 				
-		% 		quant_tbl_subj = wmh_ud2_postproc (ud2param,i); % postprocessing, including 
-		% 															 % classification and quantification
+				quant_tbl_subj = wmh_ud2_postproc (ud2param,i); % postprocessing, including 
+																% classification and quantification
 
-		% 	catch ME
+			catch ME
 				
-		% 		fprintf (2,'\nException thrown\n');
-		% 		fprintf (2,'++++++++++++++++++++++\n');
-		% 		fprintf (2,'identifier: %s\n', ME.identifier);
-		% 		fprintf (2,'message: %s\n\n', ME.message);
+				fprintf (2,'\nException thrown\n');
+				fprintf (2,'++++++++++++++++++++++\n');
+				fprintf (2,'identifier: %s\n', ME.identifier);
+				fprintf (2,'message: %s\n\n', ME.message);
 
-		% 		% assign NaN values if errors.
-		% 		quant_tbl_coh (i,:) = nan_entry (ud2param,i);
+				% assign NaN values if errors.
+				quant_tbl_coh (i,:) = nan_entry (ud2param,i);
 				
-		% 		fprintf ('%s : %s finished UBO Detector with ERROR.\n', mfilename, ud2param.lists.subjs{i,1});
+				fprintf ('%s : %s finished UBO Detector with ERROR.\n', mfilename, ud2param.lists.subjs{i,1});
 
-		% 		diary off
+				diary off
 
-		% 		continue; % jump to next iteration (for i)
+				continue; % jump to next iteration (for i)
 
-		% 	end
+			end
 
-		% 	% quant_tbl_coh (i,:) = quant_tbl_subj; % accumulate into cohort-level results
+			% quant_tbl_coh (i,:) = quant_tbl_subj; % accumulate into cohort-level results
 
-		% 	% fprintf ('%s : %s finished UBO Detector without error.\n', mfilename, ud2param.lists.subjs{i,1});
+			fprintf ('%s : %s finished UBO Detector without error.\n', mfilename, ud2param.lists.subjs{i,1});
 
-		% 	diary off
-		% end
+			diary off
+		end
 
-		% save cohort results
+		% % save cohort results
 		% writetable (quant_tbl_coh, ...
 		% 			fullfile (ud2param.dirs.subjs,'wmh_ud2.csv')); % write out cohort-level quantification table
 		
@@ -129,7 +128,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 	end
 
 	wmh_ud2_finishTime = toc (wmh_ud2_startTime);
-	fprintf ('%s : Finished (%s; %.4f seconds elapsed.\n', mfilename, string(datetime), wmh_ud2_finishTime);
+	fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), wmh_ud2_finishTime);
 	fprintf('%s : \n', mfilename);
 end
 

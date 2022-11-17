@@ -34,7 +34,7 @@ if ud2param.exe.verbose
 	fprintf ('%s : Writing masked image (%s) to nifti.\n', mfilename, out);
 end
 
-ud2_scripts_writeNii (ud2param, spm_vol(in), out_dat, out);
+wmh_ud2_scripts_writeNii (ud2param, spm_vol(in), out_dat, out);
 
 ud2_spmscripts_mask_finishTime = toc (ud2_spmscripts_mask_startTime);
 fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmscripts_mask_finishTime);

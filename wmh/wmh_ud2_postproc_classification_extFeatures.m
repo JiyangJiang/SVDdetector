@@ -1,14 +1,13 @@
 function f_tbl = wmh_ud2_postproc_classification_extFeatures (ud2param,flair,t1,lv2clstrs_struct,varargin)
 
 etime_extFeatures = tic;
-curr_cmd = mfilename;
 
 if nargin == 5
 	subjid = ud2param.lists.subjs{varargin{1},1};
 end
 
 if ud2param.exe.verbose && nargin==5
-	fprintf ('%s : extracting features for %s.\n', curr_cmd, subjid);
+	fprintf ('%s : Extracting features for %s.\n', mfilename, subjid);
 end
 
 % load essential images
@@ -72,11 +71,11 @@ f_tbl.Properties.VariableDescriptions = {'index in 1st-level clusters'
 
 f_tbl_rname = cell(Nclstrs, 1);
 
-switch ud2param.ud.classification.lv1clstr_method
+switch ud2param.classification.lv1clstr_method
 case 'kmeans'
-	Nlv1clstrs = ud2param.ud.classification.k4kmeans;
+	Nlv1clstrs = ud2param.classification.k4kmeans;
 case 'superpixel'
-	Nlv1clstrs = ud2param.ud.classification.n4superpixel_actual;
+	Nlv1clstrs = ud2param.classification.n4superpixel_actual;
 end
 
 % extract features
@@ -85,7 +84,7 @@ for i = 1 : Nlv1clstrs
 	lv2clstrs = labelmatrix (lv2clstrs_struct(i));
 	lv2clstrs_props = regionprops3(lv2clstrs_struct(i),flair_dat,'WeightedCentroid');
 
-	switch ud2param.ud.classification.lv1clstr_method
+	switch ud2param.classification.lv1clstr_method
 	case 'kmeans'
 		Nlv2clstrs = lv2clstrs_struct(i).NumObjects;
 	case 'superpixel'
@@ -97,7 +96,7 @@ for i = 1 : Nlv1clstrs
 		lin_idx = j + sum([lv2clstrs_struct(1:(i-1)).NumObjects]);
 
 		if ud2param.exe.verbose
-			fprintf ('%s : %s/%s 1st-level clusters, %s/%s 2nd-level clusters, linear_idx=%s/%s', curr_cmd, ...
+			fprintf ('%s : %s/%s 1st-level clusters, %s/%s 2nd-level clusters, linear_idx=%s/%s', mfilename, ...
 																								  num2str(i), ...
 																								  num2str(Nlv1clstrs), ...
 																								  num2str(j), ...
@@ -141,22 +140,22 @@ f_tbl.Properties.RowNames = f_tbl_rname;
 
 elapsedTimeExtFeatures = toc (etime_extFeatures);
 
-if ud2param.exe.verbose
-	fprintf ('%s : %s minutes elapsed to extract features', curr_cmd, num2str(elapsedTimeExtFeatures/60));
-	if nargin==5
-		fprintf (' (ID=%s).\n', subjid);
-	else
-		fprintf ('.\n');
-	end
-end
-
 % save f_tbl
 if ~ud2param.exe.save_dskspc && nargin==5
-	fprintf ('%s : saving feature table for %s.\n', curr_cmd, subjid);
+	fprintf ('%s : Saving feature table for %s.\n', mfilename, subjid);
 	save (fullfile (ud2param.dirs.subjs, subjid, 'ud', 'postproc', 'f_tbl.mat'), 'f_tbl');
 elseif ~ud2param.exe.save_dskspc && nargin==4
 	[flair_dir,~,~] = fileparts (flair);
-	fprintf ('%s : since no index is not passed as argument, feature table is saved to the dir containing flair: \n', curr_cmd);
-	fprintf ('%s : %s.\n', curr_cmd, flair_dir);
+	fprintf ('%s : Since no index is passed as argument, feature table is saved to the dir containing flair: \n', mfilename);
+	fprintf ('%s : %s.\n', mfilename, flair_dir);
 	save (fullfile (flair_dir,'f_tbl.mat'), 'f_tbl');
+end
+
+if ud2param.exe.verbose
+	fprintf ('%s : Finished (%s; %s minutes elapsed', mfilename, string(datetime), num2str(elapsedTimeExtFeatures/60));
+	if nargin==5
+		fprintf ('; subject ID = %s).\n', subjid);
+	else
+		fprintf (').\n');
+	end
 end

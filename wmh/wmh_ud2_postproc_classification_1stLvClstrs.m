@@ -1,3 +1,7 @@
+%
+% 1st level clusters are regions segmented by methods such as kmeans, superpixels, etc.
+%
+% varargin{1} = index
 function [lv1clstrs_dat, ud2param] = wmh_ud2_postproc_classification_1stLvClstrs (ud2param, in_nii, out_nii, varargin)
 
 wmh_ud2_postproc_classification_1stLvClstrs_startTime = tic;
@@ -19,7 +23,7 @@ dat = spm_read_vols (vol);
 dat(isnan(dat)) = 0;
 
 % volume segmentation using k-means (1st-level clusters)
-switch ud2param.ud.classification.lv1clstr_method
+switch ud2param.classification.lv1clstr_method
 
 	case 'kmeans'
 
@@ -27,7 +31,7 @@ switch ud2param.ud.classification.lv1clstr_method
 			fprintf ('%s : Using k-means to generate 1st-level clusters.\n', mfilename);
 		end
 
-		lv1clstrs_dat = imsegkmeans3 (single(dat), ud2param.ud.classification.k4kmeans, ...
+		lv1clstrs_dat = imsegkmeans3 (single(dat), ud2param.classification.k4kmeans, ...
 										'NormalizeInput', true);
 
 		% get rid of 1st-level clusters outside brain
@@ -47,7 +51,7 @@ switch ud2param.ud.classification.lv1clstr_method
 			fprintf ('%s : Using superpixes to generate 1st-level clusters.\n', mfilename);
 		end
 
-		[lv1clstrs_dat,Nlabels] = superpixels3 (dat, ud2param.ud.classification.n4superpixel);
+		[lv1clstrs_dat,Nlabels] = superpixels3 (dat, ud2param.classification.n4superpixel);
 
 
 		% exclude superpixel regions with mean intensity in the bottom 95%
@@ -75,7 +79,7 @@ switch ud2param.ud.classification.lv1clstr_method
 		end
 		lv1clstrs_dat = lv1clstrs_dat - 1; % smallest in uniq was 0, and was assigned with 1.
 										   % therefore minus 1.
-		ud2param.ud.classification.n4superpixel_actual = size(uniq,1) - 1;
+		ud2param.classification.n4superpixel_actual = size(uniq,1) - 1;
 		clearvars msk idxList sp thr uniq;
 end
 
@@ -83,15 +87,15 @@ end
 if  ~ud2param.exe.save_dskspc
 
 	if ud2param.exe.verbose && nargin==4
-		fprintf ('%s : Writing out %s''s 1st-level clusters.\n', mfilename, ud2param.lists.subjs{idx,1});
+		fprintf ('%s : Writing out %s''s 1st-level clusters to %s.\n', mfilename, ud2param.lists.subjs{idx,1}, out_nii);
 	elseif ud2param.exe.verbose && nargin==3
-		fprintf ('%s : Writing out 1st-level clusters.\n', mfilename);
+		fprintf ('%s : Writing out 1st-level clusters to %s.\n', mfilename, out_nii);
 	end
 
-	cns2_scripts_writeNii (ud2param, ...
-						   vol, ...
-						   lv1clstrs_dat, ...
-						   out_nii);
+	wmh_ud2_scripts_writeNii (ud2param, ...
+							   vol, ...
+							   lv1clstrs_dat, ...
+							   out_nii);
 end
 
 wmh_ud2_postproc_classification_1stLvClstrs_finishTime = toc (wmh_ud2_postproc_classification_1stLvClstrs_startTime);

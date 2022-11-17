@@ -21,7 +21,7 @@ subjs_dir = ud2param.dirs.subjs;
 subjid_arr = ud2param.lists.subjs;
 crtTempFailSeg = cell (ud2param.n_subjs,1);
 
-parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_cpu_cores)
+parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 
 	diary (fullfile (subjs_dir, subjid_arr{i,1}, 'ud2', 'scripts', 'wmh_ud2.log'))
 
@@ -127,7 +127,7 @@ wcGMcellArr  = cell (size(cGMcellArr_col_noFail));
 wcWMcellArr  = cell (size(cWMcellArr_col_noFail));
 wcCSFcellArr = cell (size(cCSFcellArr_col_noFail));
 
-parfor (i = 1 : size(cGMcellArr_col_noFail,1), ud2param.exe.n_cpu_cores)
+parfor (i = 1 : size(cGMcellArr_col_noFail,1), ud2param.exe.n_workers)
 	temp = [];
 	temp.exe.verbose = true;
 	wcGMcellArr{i,1}  = cns2_spmbatch_nativeToDARTEL (temp, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});

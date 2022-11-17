@@ -2,7 +2,7 @@
 function ud2param = wmh_ud2_param_global (study_dir, ...
 					             ud2_dir, ...
 					             spm_dir, ...
-					             n_cpu_cores, ...
+					             n_workers, ...
 					             save_dskspc, ...
 					             save_more_dskspc, ...
 					             verbose, ...
@@ -14,7 +14,7 @@ fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
 % Execution options
 % ++++++++++++++++++++++++++++++++++++
-ud2param.exe.n_cpu_cores      = n_cpu_cores;
+ud2param.exe.n_workers        = n_workers;
 ud2param.exe.save_dskspc      = save_dskspc;
 ud2param.exe.save_more_dskspc = save_more_dskspc;
 ud2param.exe.verbose          = verbose;
@@ -37,8 +37,8 @@ case 'MACI64'
 	ud2param.host.os = 'mac';
 end
 
-if n_cpu_cores > ud2param.host.n_cpu_cores
-	n_cpu_cores = ud2param.host.n_cpu_cores;
+if ud2param.exe.n_workers > ud2param.host.n_cpu_cores
+	ud2param.exe.n_workers = ud2param.host.n_cpu_cores;
 end
 
 switch ud2param.host.os
@@ -59,7 +59,7 @@ if ud2param.exe.verbose
 	fprintf ('%s : Computer is running on %s operating system (ud2param.host.os).\n', mfilename, ud2param.host.os);
 	fprintf ('%s : The operating system is %s with UNIX commands (ud2param.exe.unix_cmd_compatible).\n', mfilename, tmp_word);
 	fprintf ('%s : Computer has %d CPU cores (ud2param.host.n_cpu_cores).\n', mfilename, ud2param.host.n_cpu_cores);
-	fprintf ('%s : %d CPU cores will be used to run this pipeline (ud2param.exe.n_cpu_cores).\n', mfilename, n_cpu_cores);
+	fprintf ('%s : %d CPU cores will be used to run this pipeline (ud2param.exe.n_workers).\n', mfilename, ud2param.exe.n_workers);
 	fprintf ('%s : Save disk space is set to %s (ud2param.exe.save_dskspc).\n', mfilename, string(save_dskspc));
 	fprintf ('%s : Save more disk space is set to %s (ud2param.exe.save_more_dskspc).\n', mfilename, string(save_more_dskspc));
 	fprintf ('%s : +++++++++++++++++++++++++++++++++++++++++++++++++++\n', mfilename);
@@ -135,6 +135,7 @@ ud2param.templates.options = temp_opt;
 switch ud2param.templates.options{1}
 
     case 'existing'
+    	
     	age_range = ud2param.templates.options{2};
 
 		ud2param.templates.temp1_6{1,1} = fullfile (ud2param.dirs.ud2,'templates','DARTEL_0to6_templates',age_range,'Template_1.nii');
