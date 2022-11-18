@@ -5,3 +5,6 @@ This is an updated version of UBO Detector published in *Neuroimage*:
 
 Main improvements over UBO Detector include:
 
+- Fully based on MATLAB. Therefore, it can be used cross platform. The core step of segmenting FLAIR into candidate clusters in UBO Detector has been replaced by kmean or superpixels segmentation using functions provided by MATLAB. An option of using calling FSL FAST (i.e., the method used in the original UBO Detector) from MATLAB is provided.
+
+- Handle errors more elegantly. Program does not quit if a certain imaging is of bad quality. Detailed output from pipeline is documented in a log file.
