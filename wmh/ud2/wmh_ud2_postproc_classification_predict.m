@@ -21,13 +21,13 @@ fd_tbl = [f_tbl table(wmhprob)];
 if ~ud2param.exe.save_more_dskspc
 
 	if ud2param.exe.verbose
-		fprintf ('%s : Saving feature table to %s (subject ID = %s).\n', mfilename, fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'wmh', 'fd_tbl.mat'), subjid);
+		fprintf ('%s : Saving feature table to %s (subject ID = %s).\n', mfilename, fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'wmh', 'fd_tbl.mat'), subjid);
 	end
 
-	save (fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'wmh', 'fd_tbl.mat'), 'fd_tbl');
+	save (fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'wmh', 'fd_tbl.mat'), 'fd_tbl');
 
 	if ud2param.exe.verbose
-		fprintf ('%s : Saving feature table to %s (subject ID = %s).\n', mfilename, fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'wmh', 'fd_tbl.mat'), subjid);
+		fprintf ('%s : Saving feature table to %s (subject ID = %s).\n', mfilename, fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'wmh', 'fd_tbl.mat'), subjid);
 	end
 
 end
@@ -66,12 +66,12 @@ end
 
 % write to wmhprob nifti
 if ud2param.exe.verbose
-	fprintf ('%s : Writng out WMH probability map to %s (subject ID = %s).\n', mfilename, fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'wmh', 'wmhprob.nii'), subjid);
+	fprintf ('%s : Writng out WMH probability map to %s (subject ID = %s).\n', mfilename, fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'wmh', 'wmhprob.nii'), subjid);
 end
 wmh_ud2_scripts_writeNii (ud2param, ...
 					   vol, ...
 					   wmhprob_dat, ...
-					   fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'wmh', 'wmhprob.nii'));
+					   fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'wmh', 'wmhprob.nii'));
 if ud2param.exe.verbose
 	fprintf ('%s : WMH probability map has been written (subject ID = %s).\n', mfilename, subjid);
 end
@@ -85,7 +85,7 @@ wmhmask_dat = wmhprob_dat > ud2param.classification.probthr;
 wmh_ud2_scripts_writeNii (ud2param, ...
 					   vol, ...
 					   wmhmask_dat, ...
-					   fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'wmh', 'wmhmask.nii'));
+					   fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'wmh', 'wmhmask.nii'));
 if ud2param.exe.verbose
 	fprintf ('%s : WMH binary mask has been written (subject ID = %s).\n', mfilename, subjid);
 end

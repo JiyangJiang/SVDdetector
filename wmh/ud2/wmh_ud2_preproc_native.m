@@ -31,8 +31,8 @@ switch flag
 			fprintf ('%s : Using UBO Detector-segmented WMH (flag = ''ud2'').\n', mfilename);
 		end
 		
-		t1    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 't1.nii');
-		flair = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'flair.nii');
+		t1    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1.nii');
+		flair = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'flair.nii');
 
 		switch ud2param.templates.options{1}
 
@@ -183,9 +183,9 @@ switch flag
 		end
 
 		wmh_ud2_scripts_mask  (ud2param, flair, brnmsk_flairSpc, ...
-								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'flair_brn.nii'));
+								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'flair_brn.nii'));
 		wmh_ud2_scripts_mask  (ud2param, t1, brnmsk_t1spc, ...
-								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 't1_brn.nii'));
+								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1_brn.nii'));
 
 		if ud2param.exe.verbose
 			fprintf ('%s : Finished masking native T1 and FLAIR (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
@@ -195,29 +195,29 @@ switch flag
 		if ud2param.exe.verbose
 			fprintf ('%s : Renaming T1/FLAIR space GM/WM/brain masks, and GM/WM/CSF probability maps (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 		end
-		movefile (gmmsk_t1spc,     fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'gmmsk_t1spc.nii'     ));
-		movefile (wmmsk_t1spc,     fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wmmsk_t1spc.nii'     ));
-		movefile (gmprob_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'gmprob_t1spc.nii'    ));
-		movefile (wmprob_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wmprob_t1spc.nii'    ));
-		movefile (csfprob_t1spc,   fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'csfprob_t1spc.nii'   ));
-		movefile (brnmsk_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'brnmsk_t1spc.nii'    ));
-		movefile (gmmsk_flairSpc,  fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'gmmsk_flairSpc.nii'  ));
-		movefile (wmmsk_flairSpc,  fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wmmsk_flairSpc.nii'  ));
-		movefile (gmprob_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'gmprob_flairSpc.nii' ));
-		movefile (wmprob_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wmprob_flairSpc.nii' ));
-		movefile (csfprob_flairSpc,fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'csfprob_flairSpc.nii'));
-		movefile (brnmsk_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'brnmsk_flairSpc.nii' ));
+		movefile (gmmsk_t1spc,     fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmmsk_t1spc.nii'     ));
+		movefile (wmmsk_t1spc,     fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmmsk_t1spc.nii'     ));
+		movefile (gmprob_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmprob_t1spc.nii'    ));
+		movefile (wmprob_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmprob_t1spc.nii'    ));
+		movefile (csfprob_t1spc,   fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'csfprob_t1spc.nii'   ));
+		movefile (brnmsk_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'brnmsk_t1spc.nii'    ));
+		movefile (gmmsk_flairSpc,  fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmmsk_flairSpc.nii'  ));
+		movefile (wmmsk_flairSpc,  fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmmsk_flairSpc.nii'  ));
+		movefile (gmprob_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmprob_flairSpc.nii' ));
+		movefile (wmprob_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmprob_flairSpc.nii' ));
+		movefile (csfprob_flairSpc,fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'csfprob_flairSpc.nii'));
+		movefile (brnmsk_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'brnmsk_flairSpc.nii' ));
 
 		% update ud2param
 		if ud2param.exe.verbose
 			fprintf ('%s : Updading ud2param.templates to use FLAIR-space GM/WM/brain masks and GM/WM/CSF probability maps (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 		end
-		ud2param.templates.gmmsk   = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'gmmsk_flairSpc.nii'  );
-		ud2param.templates.wmmsk   = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wmmsk_flairSpc.nii'  );
-		ud2param.templates.gmprob  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'gmprob_flairSpc.nii' );
-		ud2param.templates.wmprob  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wmprob_flairSpc.nii' );
-		ud2param.templates.csfprob = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'csfprob_flairSpc.nii');
-		ud2param.templates.brnmsk  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'brnmsk_flairSpc.nii' );
+		ud2param.templates.gmmsk   = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmmsk_flairSpc.nii'  );
+		ud2param.templates.wmmsk   = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmmsk_flairSpc.nii'  );
+		ud2param.templates.gmprob  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmprob_flairSpc.nii' );
+		ud2param.templates.wmprob  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmprob_flairSpc.nii' );
+		ud2param.templates.csfprob = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'csfprob_flairSpc.nii');
+		ud2param.templates.brnmsk  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'brnmsk_flairSpc.nii' );
 
 
 	case 'general' % ==> need to test (31/10/2022)
@@ -298,20 +298,20 @@ end
 if ud2param.exe.verbose
 	fprintf ('%s : Renaming T1/FLAIR space ventricular distance map, lobar atlas, and arterial territory atlas (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 end
-movefile (ventdst_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'ventdst_t1spc.nii'    ));
-movefile (lobar_t1spc,      fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'lobar_t1spc.nii'      ));
-movefile (arterial_t1spc,   fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'arterial_t1spc.nii'   ));
-movefile (ventdst_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'ventdst_flairSpc.nii' ));
-movefile (lobar_flairSpc,   fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'lobar_flairSpc.nii'   ));
-movefile (arterial_flairSpc,fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'arterial_flairSpc.nii'));
+movefile (ventdst_t1spc,    fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'ventdst_t1spc.nii'    ));
+movefile (lobar_t1spc,      fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'lobar_t1spc.nii'      ));
+movefile (arterial_t1spc,   fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'arterial_t1spc.nii'   ));
+movefile (ventdst_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'ventdst_flairSpc.nii' ));
+movefile (lobar_flairSpc,   fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'lobar_flairSpc.nii'   ));
+movefile (arterial_flairSpc,fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'arterial_flairSpc.nii'));
 
 % update ud2param
 if ud2param.exe.verbose
 	fprintf ('%s : Updading ud2param.templates to use FLAIR-space ventricular distance map, lobar atlas, and arterial territory atlas (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 end
-ud2param.templates.ventdst  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'ventdst_flairSpc.nii' );
-ud2param.templates.lobar    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'lobar_flairSpc.nii'   );
-ud2param.templates.arterial = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'arterial_flairSpc.nii');
+ud2param.templates.ventdst  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'ventdst_flairSpc.nii' );
+ud2param.templates.lobar    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'lobar_flairSpc.nii'   );
+ud2param.templates.arterial = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'arterial_flairSpc.nii');
 
 
 wmh_ud2_preproc_native_finishTime = toc (wmh_ud2_preproc_native_startTime);

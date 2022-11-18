@@ -13,8 +13,8 @@ if nargin==3 && strcmp(ud2param.templates.options{1},'creating')
 							% argument.
 end
 
-t1    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 't1.nii');
-flair = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'flair.nii');
+t1    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1.nii');
+flair = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'flair.nii');
 
 % coregistration
 % ==============
@@ -96,11 +96,11 @@ end
 wmh_ud2_scripts_mask  (ud2param, ...
 						wt1, ...
 						ud2param.templates.brnmsk, ...
-						fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wt1_brn.nii'));
+						fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wt1_brn.nii'));
 wmh_ud2_scripts_mask  (ud2param, ...
 						wrflair, ...
 						ud2param.templates.brnmsk, ...
-						fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wrflair_brn.nii'));
+						fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wrflair_brn.nii'));
 
 if ud2param.exe.verbose
 	fprintf ('%s : Finished masking warped T1 (wT1) and FLAIR (wrFLAIR) (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});

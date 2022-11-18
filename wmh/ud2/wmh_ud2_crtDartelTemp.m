@@ -23,9 +23,9 @@ crtTempFailSeg = cell (ud2param.n_subjs,1);
 
 parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 
-	diary (fullfile (subjs_dir, subjid_arr{i,1}, 'ud2', 'scripts', 'wmh_ud2.log'))
+	diary (fullfile (subjs_dir, subjid_arr{i,1}, 'wmh', 'ud2', 'scripts', 'wmh_ud2.log'))
 
-	t1 = fullfile (subjs_dir, subjid_arr{i,1}, 'ud2', 'preproc', 't1.nii');
+	t1 = fullfile (subjs_dir, subjid_arr{i,1}, 'wmh', 'ud2', 'preproc', 't1.nii');
 
 	try
 		% t1 segmentation

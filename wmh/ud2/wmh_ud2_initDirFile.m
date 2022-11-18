@@ -32,72 +32,82 @@ parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 			fprintf ('%s : %s folder exists.\n', mfilename, fullfile(subjsdir, subjid))
 		end
 	end
-	if ~ isfolder (fullfile (subjsdir, subjid, 'ud2'))
+	if ~ isfolder (fullfile (subjsdir, subjid, 'wmh'))
 		if ud2param.exe.verbose
-			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'ud2'));
+			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'wmh'));
 		end
-		mkdir (fullfile(subjsdir, subjid),'ud2');
+		mkdir (fullfile(subjsdir, subjid), 'wmh');
 	else
 		if ud2param.exe.verbose
-			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'ud2'));
+			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'wmh'));
 		end
 	end
-	if ~ isfolder (fullfile (subjsdir, subjid, 'ud2', 'scripts'))
+	if ~ isfolder (fullfile (subjsdir, subjid, 'wmh', 'ud2'))
 		if ud2param.exe.verbose
-			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'scripts'));
+			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2'));
 		end
-		mkdir (fullfile(subjsdir, subjid, 'ud2'), 'scripts');
+		mkdir (fullfile(subjsdir, subjid, 'wmh'), 'ud2');
 	else
 		if ud2param.exe.verbose
-			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'scripts'));
+			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2'));
 		end
 	end
-	if ~ isfolder (fullfile (subjsdir, subjid, 'ud2', 'preproc'))
+	if ~ isfolder (fullfile (subjsdir, subjid, 'wmh', 'ud2', 'scripts'))
 		if ud2param.exe.verbose
-			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'preproc'));
+			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'scripts'));
 		end
-		mkdir (fullfile(subjsdir, subjid, 'ud2'), 'preproc');
+		mkdir (fullfile(subjsdir, subjid, 'wmh', 'ud2'), 'scripts');
 	else
 		if ud2param.exe.verbose
-			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'preproc'));
+			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'scripts'));
 		end
 	end
-	if ~ isfolder (fullfile (subjsdir, subjid, 'ud2', 'postproc'))
+	if ~ isfolder (fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc'))
 		if ud2param.exe.verbose
-			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'postproc'));
+			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc'));
 		end
-		mkdir (fullfile(subjsdir, subjid, 'ud2'), 'postproc');
+		mkdir (fullfile(subjsdir, subjid, 'wmh', 'ud2'), 'preproc');
 	else
 		if ud2param.exe.verbose
-			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'postproc'));
+			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc'));
 		end
 	end
-	if ~ isfolder (fullfile (subjsdir, subjid, 'ud2', 'wmh'))
+	if ~ isfolder (fullfile (subjsdir, subjid, 'wmh', 'ud2', 'postproc'))
 		if ud2param.exe.verbose
-			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'wmh'));
+			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'postproc'));
 		end
-		mkdir (fullfile(subjsdir, subjid, 'ud2'), 'wmh');
+		mkdir (fullfile(subjsdir, subjid, 'wmh', 'ud2'), 'postproc');
 	else
 		if ud2param.exe.verbose
-			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'ud2', 'wmh'));
+			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'postproc'));
+		end
+	end
+	if ~ isfolder (fullfile (subjsdir, subjid, 'wmh', 'ud2', 'wmh'))
+		if ud2param.exe.verbose
+			fprintf ('%s : Creating %s folder.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'wmh'));
+		end
+		mkdir (fullfile(subjsdir, subjid, 'wmh', 'ud2'), 'wmh');
+	else
+		if ud2param.exe.verbose
+			fprintf ('%s : %s folder exists.\n', mfilename, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'wmh'));
 		end
 	end
 
 	if ud2param.exe.verbose
-		fprintf ('%s : %s''s processing will be logged in %s.\n', mfilename, subjid, fullfile (subjsdir, subjid, 'ud2', 'scripts', 'wmh_ud2.log'));
+		fprintf ('%s : %s''s processing will be logged in %s.\n', mfilename, subjid, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'scripts', 'wmh_ud2.log'));
 	end
-	diary (fullfile (subjsdir, subjid, 'ud2', 'scripts', 'wmh_ud2.log'));
+	diary (fullfile (subjsdir, subjid, 'wmh', 'ud2', 'scripts', 'wmh_ud2.log'));
 
 	orig_t1    = fullfile (ud2param.dirs.study, 'T1',    ud2param.lists.t1{i,1});
 	orig_flair = fullfile (ud2param.dirs.study, 'FLAIR', ud2param.lists.flair{i,1});
 
 	% copy original T1 to subject folder
 	if ud2param.exe.verbose
-		fprintf ('%s : Start copying %s''s T1 to %s.\n', mfilename, subjid, fullfile (subjsdir, subjid, 'ud2', 'preproc', 't1.nii'));
+		fprintf ('%s : Start copying %s''s T1 to %s.\n', mfilename, subjid, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc', 't1.nii'));
 	end
 	if isfile (orig_t1)
 		copyfile (orig_t1, ...
-				  fullfile (subjsdir, subjid, 'ud2', 'preproc', 't1.nii'));
+				  fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc', 't1.nii'));
 	else
 		ME = MException ('CNS2:initDirFile:origT1notFound', ...
 						 '%s specified in ud2param but not found.', orig_t1);
@@ -106,11 +116,11 @@ parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 
 	% copy original FLAIR to subject folder
 	if ud2param.exe.verbose
-		fprintf ('%s : Start copying %s''s FLAIR to %s.\n', mfilename, subjid, fullfile (subjsdir, subjid, 'ud2', 'preproc', 'flair.nii'));
+		fprintf ('%s : Start copying %s''s FLAIR to %s.\n', mfilename, subjid, fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc', 'flair.nii'));
 	end
 	if isfile (orig_flair)
 		copyfile (orig_flair, ...
-				  fullfile (subjsdir, subjid, 'ud2', 'preproc', 'flair.nii'));
+				  fullfile (subjsdir, subjid, 'wmh', 'ud2', 'preproc', 'flair.nii'));
 	else
 		ME = MException ('CNS2:initDirFile:origFLAIRnotFound', ...
 						 '%s specified in ud2param but not found.', orig_flair);

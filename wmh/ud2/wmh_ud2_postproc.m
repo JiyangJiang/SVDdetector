@@ -17,8 +17,8 @@ switch ud2param.classification.ext_space
 		if ud2param.exe.verbose
 			fprintf ('%s : WMH will be extracted in DARTEL space.\n', mfilename);
 		end
-		flair  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wrflair_brn.nii');
-		t1     = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'ud2', 'preproc', 'wt1_brn.nii');
+		flair  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wrflair_brn.nii');
+		t1     = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wt1_brn.nii');
 		% apply WM mask if necessary in the future
 
 	case 'native'

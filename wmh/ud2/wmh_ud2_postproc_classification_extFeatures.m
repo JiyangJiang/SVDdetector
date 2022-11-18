@@ -159,7 +159,7 @@ elapsedTimeExtFeatures = toc (etime_extFeatures);
 % save f_tbl
 if ~ud2param.exe.save_dskspc && nargin==5
 	fprintf ('%s : Saving feature table for %s.\n', mfilename, subjid);
-	save (fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'postproc', 'f_tbl.mat'), 'f_tbl');
+	save (fullfile (ud2param.dirs.subjs, subjid, 'wmh', 'ud2', 'postproc', 'f_tbl.mat'), 'f_tbl');
 elseif ~ud2param.exe.save_dskspc && nargin==4
 	[flair_dir,~,~] = fileparts (flair);
 	fprintf ('%s : Since no index is passed as argument, feature table is saved to the dir containing flair: \n', mfilename);
