@@ -21,7 +21,8 @@ function wmh_ud2_scripts_writeNii (ud2param, vol, dat, out, varargin)
 			split_vols{i,1} = fullfile (outdir, [fname '_' num2str(i) ext]);
 			writeNii (vol, dat(:,:,:,i), split_vols{i,1});
 		end
-		spm_file_merge (split_vols,out);
+		spm_file_merge (split_vols,out); % merge all split 3D imgs to 4D
+		delete (split_vols{:,1}); % remove split 3D imgs
 	% write 3D nii
 	elseif nargin == 4
 		if ud2param.exe.verbose

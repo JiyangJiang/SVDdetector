@@ -59,19 +59,19 @@ if ud2param.exe.verbose
 	fprintf ('%s : Finished classifying WMH vs. non-WMH.\n', mfilename);
 end
 
-% % 2. quantification
-% % +++++++++++++++++++++
-% if ud2param.exe.verbose
-% 	fprintf ('%s : Calling wmh_ud2_postproc_quantification for quantifying WMH measures.\n', mfilename);
-% end
+% 2. quantification
+% +++++++++++++++++++++
+if ud2param.exe.verbose
+	fprintf ('%s : Calling wmh_ud2_postproc_quantification for quantifying WMH measures.\n', mfilename);
+end
 
-% quant_tbl_subj = wmh_ud2_postproc_quantification (wmhmask_dat,flair,ud2param,i);
+quant_tbl_subj = wmh_ud2_postproc_quantification (wmhmask_dat,flair,ud2param,i);
 
-% if ud2param.exe.verbose
-% 	fprintf ('%s : Finished quantifying WMH measures.\n', mfilename);
-% end
+if ud2param.exe.verbose
+	fprintf ('%s : Finished quantifying WMH measures.\n', mfilename);
+end
 
-% wmh_ud2_postproc_finishTime = toc (wmh_ud2_postproc_startTime);
-% fprintf ('%s : Finished (%s; %.4f seconds elapsed.\n', mfilename, string(datetime), wmh_ud2_postproc_finishTime);
-% fprintf ('%s :\n', mfilename);
+wmh_ud2_postproc_finishTime = toc (wmh_ud2_postproc_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed.\n', mfilename, string(datetime), wmh_ud2_postproc_finishTime);
+fprintf ('%s :\n', mfilename);
 

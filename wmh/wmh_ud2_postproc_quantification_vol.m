@@ -1,10 +1,10 @@
-% Standard CNS2 UD call:
+% Standard UD2 call:
 %
 % 	varargin{1} = ud2param
-% 	varargin{2} = subject's id in cns2
+% 	varargin{2} = subject's id in ud2
 %
 % ALTERNATIVELY, if wmh results from any software, and full array of 
-%                measures are required. (To be developed)
+%                measures are required. (TO BE DEVELOPED)
 %
 % 	varargin{1} = t1
 %
@@ -17,7 +17,9 @@
 
 function vol_tbl = wmh_ud2_postproc_quantification_vol (wmhmask_dat,flair,varargin)
 
-curr_cmd=mfilename;
+wmh_ud2_postproc_quantification_vol_startTime = tic;
+
+fprintf ('%s :\n', mfilename);
 
 % voxel size
 vol=spm_vol(flair);
@@ -30,8 +32,10 @@ if nargin==4
 	ud2param = varargin{1};
 	subjid    = varargin{2};
 
+	fprintf ('%s : Started (%s; subject ID = %s).\n', mfilename, string (datetime), subjid);
+
 	if ud2param.exe.verbose 
-		fprintf ('%s : quantifying volume for %s.\n', curr_cmd, subjid);
+		fprintf ('%s : Started quantifying volume (subject ID = %s).\n', mfilename, subjid);
 	end
 
 	% whole brain WMH vol
@@ -46,6 +50,8 @@ if nargin==4
 										% wmh voxels may not fall in ROI atlas.
 	pvwmh_vol = sum(nonzeros(pvwmh_dat)) * voxsiz;
 	dwmh_vol  = sum(nonzeros(dwmh_dat))  * voxsiz;
+
+
 
 	% lobar measures
 	lobar_atlas_dat = spm_read_vols(spm_vol(ud2param.templates.lobar));
@@ -162,6 +168,9 @@ elseif nargin==2
 % +++++++++++++++++++++++++++++++++++++++++++
 elseif nargin==3
 	t1    = varargin{1};
+	%
+	% TO BE DONE
+	%
 end
 
 

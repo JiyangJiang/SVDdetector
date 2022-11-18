@@ -42,7 +42,21 @@ f_names = {'1stLvClstrIdx'; '2ndLvClstrIdx'
 		   'cent_x'; 'cent_y'; 'cent_z'};
 
 f_varType = cell(14,1);
-f_varType(:) = {'single'};
+f_varType(:) = {'uint8'
+				'uint32'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'
+				'double'}; 	% to match data class in built-in kNN model which has all features in double.
+							% 1st and 2nd columns are for lv1 and lv2 index.
 
 f_tbl = table ('Size', [Nclstrs 14], ...
 			   'VariableTypes', f_varType, ...
@@ -104,7 +118,7 @@ for i = 1 : Nlv1clstrs
 																								  num2str(lin_idx), ...
 																								  num2str(Nclstrs));
 			if nargin==5
-				fprintf (' (ID=%s).\n', subjid);
+				fprintf (' (subject ID = %s).\n', subjid);
 			else
 				fprintf ('.\n');
 			end
@@ -113,12 +127,12 @@ for i = 1 : Nlv1clstrs
 		clstr = lv2clstrs;
 		clstr (clstr ~= j) = 0;
 		clstr (clstr == j) = 1;
-		clstr = single (clstr);
+		clstr = double (clstr);
 
 		clstr_sz = nnz(clstr);
 
-		f_tbl.(f_names{1})(lin_idx)  = i;
-		f_tbl.(f_names{2})(lin_idx)  = j;
+		f_tbl.(f_names{1})(lin_idx)  = uint8(i);
+		f_tbl.(f_names{2})(lin_idx)  = uint32(j);
 		f_tbl.(f_names{3})(lin_idx)  = mean(nonzeros(clstr .* t1_dat))    / meanInt_GMonT1;
 		f_tbl.(f_names{4})(lin_idx)  = mean(nonzeros(clstr .* flair_dat)) / meanInt_GMonFLAIR;
 		f_tbl.(f_names{5})(lin_idx)  = mean(nonzeros(clstr .* t1_dat))    / meanInt_WMonT1;
@@ -132,6 +146,8 @@ for i = 1 : Nlv1clstrs
 		f_tbl.(f_names{13})(lin_idx) = lv2clstrs_props.WeightedCentroid(j,1); % according to visual inspection.
 		f_tbl.(f_names{14})(lin_idx) = lv2clstrs_props.WeightedCentroid(j,3);
 
+
+
 		f_tbl_rname{lin_idx,1} = [num2str(i) '_' num2str(j)];
 	end
 end
@@ -143,7 +159,7 @@ elapsedTimeExtFeatures = toc (etime_extFeatures);
 % save f_tbl
 if ~ud2param.exe.save_dskspc && nargin==5
 	fprintf ('%s : Saving feature table for %s.\n', mfilename, subjid);
-	save (fullfile (ud2param.dirs.subjs, subjid, 'ud', 'postproc', 'f_tbl.mat'), 'f_tbl');
+	save (fullfile (ud2param.dirs.subjs, subjid, 'ud2', 'postproc', 'f_tbl.mat'), 'f_tbl');
 elseif ~ud2param.exe.save_dskspc && nargin==4
 	[flair_dir,~,~] = fileparts (flair);
 	fprintf ('%s : Since no index is passed as argument, feature table is saved to the dir containing flair: \n', mfilename);

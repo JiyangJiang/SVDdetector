@@ -2,7 +2,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 					n_workers, save_dskspc, save_more_dskspc, verbose, temp_opt, ...
 						lv1clstMethod, k4kmeans, k4knn, n4superpixel, probthr, extSpace, pvmag, sizthr_mm3)
 
-	ud2_dir = fullfile(svdd_dir,'wmh','ud2');
+	ud2_dir = fullfile(svdd_dir,'wmh');
 	addpath (ud2_dir, spm_dir);
 
 	wmh_ud2_startTime = tic;
@@ -45,9 +45,6 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 			flowmaps = {}; % This had to be set. Otherwise, an error of unknown
 						   % 'flowmaps' will happen, although 'existing' is set.
 		end
-
-		% % for parfor
-		% subjs_list = ud2param.lists.subjs;
 
 		% parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 		parfor (i = 1:1, ud2param.exe.n_workers)

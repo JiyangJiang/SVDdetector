@@ -25,7 +25,7 @@ end
 rflair = wmh_ud2_spmbatch_coregistration (ud2param, flair, t1, 'same_dir');
 
 if ud2param.exe.verbose
-	fprintf ('%s : wmh_ud2_spmbatch_coregistration finished (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
+	fprintf ('%s : wmh_ud2_spmbatch_coregistration finished. FLAIR has been registered to T1 (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 end
 
 switch ud2param.templates.options{1}
