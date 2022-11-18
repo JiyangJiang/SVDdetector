@@ -3,7 +3,9 @@
 
 function noc_tbl = wmh_ud2_postproc_quantification_noc (wmhmask_dat,flair,varargin)
 
-curr_cmd = mfilename;
+wmh_ud2_postproc_quantification_noc_startTime = tic;
+
+fprintf ('%s : \n', mfilename);
 
 % default size threshold
 % used in wmh results from any software
@@ -11,14 +13,17 @@ thr = [3 9 15]; % in num of vox
 
 
 % ++++++++++++++++++++++++++
-% standard call from cns2 ud
+% standard call from ud2
 % ++++++++++++++++++++++++++
 if nargin==4
+
 	ud2param = varargin{1};
 	subjid    = varargin{2};
 
+	fprintf ('%s : Started (%s; subject ID = %s).\n', mfilename, string(datetime), subjid);
+
 	if ud2param.exe.verbose
-		fprintf ('%s : quantifying noc for %s.\n', curr_cmd, subjid);
+		fprintf ('%s : Start quantifying number of clusters (subject ID = %s).\n', mfilename, subjid);
 	end
 
 	% convert size cut-off in mm^3 to num of vox
@@ -69,11 +74,27 @@ if nargin==4
 
 	% quantify lobar noc
 	% ===================
+	if ud2param.exe.verbose
+		fprintf ('%s : Calling wmh_ud2_postproc_quantification_noc_lobar to quantify numbers of clusters in lobes (subject ID = %s).\n', mfilename, subjid);
+	end
+
 	lobar_noc_tbl = wmh_ud2_postproc_quantification_noc_lobar (ud2param,wmhclstrs_struct,flair);
+
+	if ud2param.exe.verbose
+		fprintf ('%s : Numbers of clusters in lobes have been quantified (subject ID = %s).\n', mfilename, subjid);
+	end
 
 	% quantify arterial noc
 	% =====================
+	if ud2param.exe.verbose
+		fprintf ('%s : Calling wmh_ud2_postproc_quantification_noc_lobar to quantify numbers of clusters in arterial territories (subject ID = %s).\n', mfilename, subjid);
+	end
+
 	arterial_noc_tbl = wmh_ud2_postproc_quantification_noc_arterial (ud2param,wmhclstrs_struct,flair);
+
+	if ud2param.exe.verbose
+		fprintf ('%s : Numbers of clusters in arterial territories have been quantified (subject ID = %s).\n', mfilename, subjid);
+	end
 
 	% output table
 	% =============
@@ -81,6 +102,10 @@ if nargin==4
 				lobar_noc_tbl ...
 				arterial_noc_tbl];
 
+
+	if ud2param.exe.verbose
+		fprintf ('%s : Finished quantifying number of clusters (subject ID = %s).\n', mfilename, subjid);
+	end
 
 
 % ++++++++++++++++++++++++++++++++++++++++
@@ -129,5 +154,12 @@ elseif nargin==2
 % can be used on results from any software
 % +++++++++++++++++++++++++++++++++++++++++++
 elseif nargin==3
+
+	% TO BE DONE
+
 end
 
+wmh_ud2_postproc_quantification_noc_finishTime = toc (wmh_ud2_postproc_quantification_noc_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_noc_finishTime, subjid);
+fprintf ('%s :\n', mfilename);

@@ -1,5 +1,10 @@
 function lobar_noc_tbl = wmh_ud2_postproc_quantification_noc_lobar (ud2param,wmhclstrs_struct,flair)
 
+wmh_ud2_postproc_quantification_noc_lobar_startTime = tic;
+
+fprintf ('%s : \n', mfilename);
+fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
+
 ventdst_dat = spm_read_vols(spm_vol(ud2param.templates.ventdst));
 pv_mask = ventdst_dat < ud2param.quantification.ud.pvmag;
 lobar_atlas_dat = spm_read_vols(spm_vol(ud2param.templates.lobar));
@@ -311,3 +316,8 @@ lobar_noc_tbl = table (pvwmh_noc, ...
 										rcere_noc_c,...
 										brnstm_noc_c,...
 										unid_lob_noc_c);
+
+wmh_ud2_postproc_quantification_noc_lobar_finishTime = toc (wmh_ud2_postproc_quantification_noc_lobar_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_noc_lobar_finishTime, subjid);
+fprintf ('%s :\n', mfilename);

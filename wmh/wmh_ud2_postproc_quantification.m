@@ -178,7 +178,7 @@ elseif nargin==2
 	if ud2param.exe.verbose
 		fprintf ('%s : Done merging into quant_tbl_subj (subject ID = %s).\n', mfilename, subjid);
 	end
-	
+
 
 % ++++++++++++++++++++++++++++++++++++++++++++++++++
 % both global and regional measures on wmh segmented
@@ -195,5 +195,6 @@ elseif nargin==3 && strcmp(varargin{1},'allMeas')
 end
 
 wmh_ud2_postproc_quantification_finishTime = toc (wmh_ud2_postproc_quantification_startTime);
-fprintf ('%s : Finished (%s; subject ID = %s).\n', mfilename, string(datetime), subjid);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_finishTime, subjid);
 fprintf ('%s :\n', mfilename);

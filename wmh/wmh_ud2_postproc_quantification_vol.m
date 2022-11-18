@@ -151,6 +151,10 @@ if nargin==4
 					 rpac_vol,    lpac_vol, ...
 					 unid_art_vol);
 
+	if ud2param.exe.verbose
+		fprintf ('%s : Finished quantifying volume (subject ID = %s).\n', mfilename, subjid);
+	end
+
 % ++++++++++++++++++++++++++++++++++++++++
 % only global wmh vol
 % can be used on results from any software
@@ -173,5 +177,8 @@ elseif nargin==3
 	%
 end
 
-
+wmh_ud2_postproc_quantification_vol_finishTime = toc (wmh_ud2_postproc_quantification_vol_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_vol_finishTime, subjid);
+fprintf ('%s :\n', mfilename);
 

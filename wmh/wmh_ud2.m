@@ -96,13 +96,13 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 			diary off
 		end
 
-		% % save cohort results
-		% writetable (quant_tbl_coh, ...
-		% 			fullfile (ud2param.dirs.subjs,'wmh_ud2.csv')); % write out cohort-level quantification table
+		% save cohort results
+		writetable (quant_tbl_coh, ...
+					fullfile (ud2param.dirs.subjs,'wmh_ud2.csv')); % write out cohort-level quantification table
 		
-		% if ~ud2param.exe.save_dskspc
-		% 	save (fullfile (ud2param.dirs.subjs,'wmh_ud2.mat'), 'quant_tbl_coh'); % save matlab .mat file
-		% end
+		if ~ud2param.exe.save_dskspc
+			save (fullfile (ud2param.dirs.subjs,'wmh_ud2.mat'), 'quant_tbl_coh'); % save matlab .mat file
+		end
 
 	catch ME
 		fprintf (2,'\n%s : Exception thrown\n', mfilename);

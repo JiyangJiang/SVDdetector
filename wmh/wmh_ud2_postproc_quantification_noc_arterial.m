@@ -1,5 +1,10 @@
 function arterial_noc_tbl = wmh_ud2_postproc_quantification_noc_arterial (ud2param,wmhclstrs_struct,flair)
 
+wmh_ud2_postproc_quantification_noc_arterial_startTime = tic;
+
+fprintf ('%s : \n', mfilename);
+fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
+
 arterial_atlas_dat = spm_read_vols(spm_vol(ud2param.templates.arterial));
 
 % convert size cut-off in mm^3 to num of vox
@@ -398,3 +403,8 @@ arterial_noc_tbl = table   (raah_noc,...
 											rpac_noc_c,...
 											lpac_noc_c,...
 											unid_art_noc_c);
+
+wmh_ud2_postproc_quantification_noc_arterial_finishTime = toc (wmh_ud2_postproc_quantification_noc_arterial_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_noc_arterial_finishTime, subjid);
+fprintf ('%s :\n', mfilename);

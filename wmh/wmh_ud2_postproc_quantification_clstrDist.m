@@ -5,11 +5,18 @@
 
 function dist_tbl = wmh_ud2_postproc_quantification_clstrDist (wmhmask_dat,flair,varargin)
 
+	wmh_ud2_postproc_quantification_clstrDist_startTime = tic;
+	fprintf ('%s : \n', mfilename);
+
 	if nargin==4
+
 		ud2param = varargin{1};
+		subjid   = varargin{2};
+
+		fprintf ('%s : Started (%s; subject ID = %s).\n', mfilename, string(datetime), subjid);
+
 		if ud2param.exe.verbose
-			curr_cmd = mfilename;
-			fprintf ('%s : quantifying distance between WMH clusters for %s.\n', curr_cmd, varargin{2});
+			fprintf ('%s : Quantifying distance between WMH clusters (subject ID = %s).\n', mfilename, subjid);
 		end
 	end
 
@@ -50,6 +57,22 @@ function dist_tbl = wmh_ud2_postproc_quantification_clstrDist (wmhmask_dat,flair
 	dist_tbl.Properties.VariableNames = {'avg_clstr_dist'
 										 'std_clstr_dist'
 										 'var_clstr_dist'};
+
+
+	wmh_ud2_postproc_quantification_clstrDist_finishTime = toc (wmh_ud2_postproc_quantification_clstrDist_startTime);
+
+	if nargin==4
+		if ud2param.exe.verbose
+			fprintf ('%s : Quantifying distance between WMH clusters (subject ID = %s).\n', mfilename, subjid);
+			fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+					wmh_ud2_postproc_quantification_clstrDist_finishTime, subjid);
+		end
+	else
+		fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ...
+					wmh_ud2_postproc_quantification_clstrDist_finishTime);
+	end
+	
+	fprintf ('%s :\n', mfilename);
 
 end
 

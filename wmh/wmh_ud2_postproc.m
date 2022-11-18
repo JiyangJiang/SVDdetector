@@ -46,6 +46,7 @@ if ~ isfile (t1)
 end
 
 
+
 % 1. classification
 % +++++++++++++++++++++
 if ud2param.exe.verbose
@@ -58,6 +59,8 @@ end
 if ud2param.exe.verbose
 	fprintf ('%s : Finished classifying WMH vs. non-WMH.\n', mfilename);
 end
+
+
 
 % 2. quantification
 % +++++++++++++++++++++

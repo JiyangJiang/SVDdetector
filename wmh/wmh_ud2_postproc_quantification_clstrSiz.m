@@ -1,12 +1,18 @@
 % varargin{1} = ud2param
-% varargin{2} = subject's id in cns2
+% varargin{2} = subject's id in ud2
 function clstrSiz_tbl = wmh_ud2_postproc_quantification_clstrSiz (wmhmask_dat,flair,varargin)
+
+wmh_ud2_postproc_quantification_clstrSiz_startTime = tic;
+fprintf ('%s : \n', mfilename);
 
 if nargin==4
 	ud2param = varargin{1};
+	subjid   = varargin{2};
+
+	fprintf ('%s : Started (%s; subject ID = %s).\n', mfilename, string(datetime), subjid);
+
 	if ud2param.exe.verbose
-		curr_cmd = mfilename;
-		fprintf ('%s : quantifying variance in WMH cluster sizes for %s.\n', curr_cmd, varargin{2});
+		fprintf ('%s : Quantifying variance in WMH cluster sizes (subject ID = %s).\n', mfilename, subjid);
 	end
 end
 
@@ -29,3 +35,18 @@ clstrSiz_tbl = table (mean(wmhclstrs_props.Volume * sptRes),...
 clstrSiz_tbl.Properties.VariableNames = {'avg_clstrSiz'
 										 'std_clstrSiz'
 										 'var_clstrSiz'};
+
+wmh_ud2_postproc_quantification_clstrSiz_finishTime = toc (wmh_ud2_postproc_quantification_clstrSiz_startTime);
+
+if nargin==4
+	if ud2param.exe.verbose
+		fprintf ('%s : Finished quantifying variance in WMH cluster sizes (subject ID = %s).\n', mfilename, subjid);
+		fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_clstrSiz_finishTime, subjid);
+	end
+else
+	fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_clstrSiz_finishTime);
+end
+
+fprintf ('%s :\n', mfilename);
