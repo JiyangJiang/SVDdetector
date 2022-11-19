@@ -6,13 +6,13 @@ fprintf ('%s : \n', mfilename);
 fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
 ventdst_dat = spm_read_vols(spm_vol(ud2param.templates.ventdst));
-pv_mask = ventdst_dat < ud2param.quantification.ud.pvmag;
+pv_mask = ventdst_dat < ud2param.quantification.pvmag;
 lobar_atlas_dat = spm_read_vols(spm_vol(ud2param.templates.lobar));
 
 % convert size cut-off in mm^3 to num of vox
 ni = niftiinfo (flair);
 voxSiz = ni.PixelDimensions(1) * ni.PixelDimensions(2) * ni.PixelDimensions(3);
-thr = round (ud2param.quantification.ud.sizthr / voxSiz);
+thr = round (ud2param.quantification.sizthr / voxSiz);
 
 wmhclstrs_props = regionprops3 (wmhclstrs_struct,...
 								spm_read_vols(spm_vol(flair)),...
@@ -318,6 +318,6 @@ lobar_noc_tbl = table (pvwmh_noc, ...
 										unid_lob_noc_c);
 
 wmh_ud2_postproc_quantification_noc_lobar_finishTime = toc (wmh_ud2_postproc_quantification_noc_lobar_startTime);
-fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
-				wmh_ud2_postproc_quantification_noc_lobar_finishTime, subjid);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_noc_lobar_finishTime);
 fprintf ('%s :\n', mfilename);

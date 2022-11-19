@@ -10,7 +10,7 @@ arterial_atlas_dat = spm_read_vols(spm_vol(ud2param.templates.arterial));
 % convert size cut-off in mm^3 to num of vox
 ni = niftiinfo (flair);
 voxSiz = ni.PixelDimensions(1) * ni.PixelDimensions(2) * ni.PixelDimensions(3);
-thr = round (ud2param.quantification.ud.sizthr / voxSiz);
+thr = round (ud2param.quantification.sizthr / voxSiz);
 
 wmhclstrs_props = regionprops3 (wmhclstrs_struct,...
 								spm_read_vols(spm_vol(flair)),...
@@ -405,6 +405,6 @@ arterial_noc_tbl = table   (raah_noc,...
 											unid_art_noc_c);
 
 wmh_ud2_postproc_quantification_noc_arterial_finishTime = toc (wmh_ud2_postproc_quantification_noc_arterial_startTime);
-fprintf ('%s : Finished (%s; %.4f seconds elapsed; subject ID = %s).\n', mfilename, string(datetime), ...
-				wmh_ud2_postproc_quantification_noc_arterial_finishTime, subjid);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ...
+				wmh_ud2_postproc_quantification_noc_arterial_finishTime);
 fprintf ('%s :\n', mfilename);

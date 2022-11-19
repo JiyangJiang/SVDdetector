@@ -29,7 +29,7 @@ if nargin==4
 	% convert size cut-off in mm^3 to num of vox
 	ni = niftiinfo (flair);
 	voxSiz = ni.PixelDimensions(1) * ni.PixelDimensions(2) * ni.PixelDimensions(3);
-	thr = round (ud2param.quantification.ud.sizthr / voxSiz);
+	thr = round (ud2param.quantification.sizthr / voxSiz);
 
 	wmhclstrs_struct = bwconncomp (wmhmask_dat, 26); % divide into 26-conn clusters
 

@@ -43,7 +43,7 @@ if nargin==4
 
 	% separation between PVWMH and DWMH
 	ventdst_dat = spm_read_vols(spm_vol(ud2param.templates.ventdst));
-	pv_mask = ventdst_dat < ud2param.quantification.ud.pvmag;
+	pv_mask = ventdst_dat < ud2param.quantification.pvmag;
 	pvwmh_dat = wmhmask_dat .* pv_mask;
 	dwmh_dat = wmhmask_dat - pvwmh_dat; % NOTE that dwmh vol calculated this way may be
 										% larger than summing all ROIs together as some
