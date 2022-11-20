@@ -46,8 +46,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 						   % 'flowmaps' will happen, although 'existing' is set.
 		end
 
-		% parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
-		parfor (i = 1:1, ud2param.exe.n_workers)
+		parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 			
 			diary (fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'scripts', 'wmh_ud2.log'));
 
