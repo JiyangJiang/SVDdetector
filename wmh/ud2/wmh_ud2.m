@@ -40,7 +40,8 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 
 		% creating template
 		if strcmp(ud2param.templates.options{1},'creating') % creating templates
-			flowmaps = wmh_ud2_crtDartelTemp (ud2param);
+			[ud2param, flowmaps, ...
+			cGMcellArr_col_noFail, cWMcellArr_col_noFail, cCSFcellArr_col_noFail] = wmh_ud2_crtDartelTemp (ud2param);
 		else
 			flowmaps = {}; % This had to be set. Otherwise, an error of unknown
 						   % 'flowmaps' will happen, although 'existing' is set.
@@ -56,13 +57,13 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 				    case 'existing'
 				    	wmh_ud2_preproc (ud2param,i);           	 % preprocessing (existing templates)
 					case 'creating'
-						if ~ismember (ud2param.lists.subjs{i,1},ud2param.lists.crtTempFailSeg)
+						if ismember (ud2param.lists.subjs{i,1}, ud2param.lists.crtTempSucceedSeg)
 							wmh_ud2_preproc (ud2param,i,flowmaps);  % preprocessing (creating templates - 
 																		 % flowmaps are generated during creating
 																		 % templates).
 						else
-							ME = MException ('ud2:ud:crtTempFailSeg', ...
-							 '%s failed segmentation during creating templates.', ud2param.lists.subjs{i,1});
+							ME = MException ('wmh_ud2:crtTempFailSeg', ...
+							 '%s failed tissue segmentation during creating templates. The T1w image may have some issue. Therefore, %s is given all NaN values in the final output.', ud2param.lists.subjs{i,1}, ud2param.lists.subjs{i,1});
 							throw (ME);
 						end
 				end
@@ -80,7 +81,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 				% assign NaN values if errors.
 				quant_tbl_coh (i,:) = nan_entry (ud2param,i);
 				
-				fprintf ('%s : %s finished UBO Detector with ERROR.\n', mfilename, ud2param.lists.subjs{i,1});
+				fprintf ('%s : %s finished UBO Detector 2 with ERROR.\n', mfilename, ud2param.lists.subjs{i,1});
 
 				diary off
 
@@ -90,7 +91,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 
 			% quant_tbl_coh (i,:) = quant_tbl_subj; % accumulate into cohort-level results
 
-			fprintf ('%s : %s finished UBO Detector without error.\n', mfilename, ud2param.lists.subjs{i,1});
+			fprintf ('%s : %s finished UBO Detector 2 without error.\n', mfilename, ud2param.lists.subjs{i,1});
 
 			diary off
 		end

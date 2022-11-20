@@ -42,7 +42,7 @@ switch ud2param.classification.ext_space
 											% which are passed as a cell array in the 3rd
 											% argument.
 
-					if ud2param.ext.verbose
+					if ud2param.exe.verbose
 						fprintf ('%s : Calling wmh_ud2_preproc_dartel for preprocessing.\n', mfilename);
 					end
 

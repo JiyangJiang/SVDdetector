@@ -13,16 +13,22 @@ function [flowMapCellArr,varargout] = wmh_ud2_spmbatch_runDARTELc (ud2param, ...
                                                                     rcWMcellArr_col, ...
                                                                     rcCSFcellArr_col)
     
+    ud2_spmbatch_runDARTELc_startTime = tic;
+
+    fprintf ('%s :\n', mfilename);
+    fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
+
     if (size(rcGMcellArr_col,1) == size(rcWMcellArr_col,1)) && ...
         (size(rcWMcellArr_col,1) == size(rcCSFcellArr_col,1))
         N = size(rcGMcellArr_col,1);
     else
         ME = MException ('wmh_ud2_spmbatch_runDARTELc:unequalArraySizes',...
                             '%s : rcGM, rcWM, rcCSF arrays are not of the same size.\n', mfilename);
+        throw (ME);
     end
 
     if ud2param.exe.verbose
-        fprintf ('%s : Creating templates.\n', mfilename);
+        fprintf ('%s : Creating DARTEL templates.\n', mfilename);
     end
     
     %% SPM
@@ -84,7 +90,9 @@ function [flowMapCellArr,varargout] = wmh_ud2_spmbatch_runDARTELc (ud2param, ...
     varargout{6} = fullfile (rcGM1folder, 'Template_5.nii');
     varargout{7} = fullfile (rcGM1folder, 'Template_6.nii');
 
-
+    ud2_spmbatch_runDARTELc_finishTime = toc (ud2_spmbatch_runDARTELc_startTime);
+    fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), ud2_spmbatch_runDARTELc_finishTime);
+    fprintf ('%s :\n');
 
     
     

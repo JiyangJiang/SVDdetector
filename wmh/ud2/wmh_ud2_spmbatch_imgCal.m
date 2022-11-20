@@ -15,13 +15,14 @@
 
 function outputImg = wmh_ud2_spmbatch_imgCal (ud2param, calType, outputDir, outputFilename, N, inputCellArr_col)
 
-if ud2param.exe.verbose
-    curr_cmd = mfilename;
-    fprintf ('%s : %s images.\n', curr_cmd, calType);
-end
+wmh_ud2_spmbatch_imgCal_startTime = tic;
 
-spm('defaults', 'fmri');
-spm_jobman('initcfg');
+fprintf ('%s :\n', mfilename);
+fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
+
+if ud2param.exe.verbose
+    fprintf ('%s : %s images.\n', mfilename, calType);
+end
 
 [row,col] = size (inputCellArr_col);
 
@@ -51,8 +52,12 @@ switch calType
         end
         
     otherwise
-        error (['No calculation type ' calType ' defined in ud2_spmbatch_imgCal.']);
+        error (['No calculation type ' calType ' defined in wmh_ud2_spmbatch_imgCal.']);
 end
+
+spm('defaults', 'fmri');
+spm_jobman('initcfg');
+clear matlabbatch;
 
 matlabbatch{1}.spm.util.imcalc.input = inputCellArr_col;
 matlabbatch{1}.spm.util.imcalc.output = outputFilename;
@@ -67,3 +72,11 @@ matlabbatch{1}.spm.util.imcalc.options.dtype = 64;
 output = spm_jobman ('run',matlabbatch);
 
 outputImg = fullfile(outputDir, [outputFilename '.nii']);
+
+if ud2param.exe.verbose
+    fprintf ('%s : Output image is %s.\n', mfilename, outputImg);
+end
+
+wmh_ud2_spmbatch_imgCal_finishTime = toc (wmh_ud2_spmbatch_imgCal_startTime);
+fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), wmh_ud2_spmbatch_imgCal_finishTime);
+fprintf ('%s :\n', mfilename);

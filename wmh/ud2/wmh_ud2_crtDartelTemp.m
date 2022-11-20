@@ -1,4 +1,5 @@
-function flowMapCellArr = wmh_ud2_crtDartelTemp (ud2param)
+function [ud2param, flowMapCellArr, ...
+			cGMcellArr_col, cWMcellArr_col, cCSFcellArr_col] = wmh_ud2_crtDartelTemp (ud2param)
 
 wmh_ud2_crtDartelTemp_startTime = tic;
 fprintf ('%s : \n', mfilename);
@@ -53,13 +54,13 @@ parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
 		fprintf ('%s :\n', mfilename);
 		fprintf ('%s : %s'' T1 failed segmentation therefore was excluded from creating cohort-specific templates.\n\n', mfilename, subjid_arr{i,1});
 
-		rcGMcellArr_col{i,1}  = 'N/A';
-		rcWMcellArr_col{i,1}  = 'N/A';
-		rcCSFcellArr_col{i,1} = 'N/A';
+		rcGMcellArr_col{i,1}  = 'failedTissueSeg';
+		rcWMcellArr_col{i,1}  = 'failedTissueSeg';
+		rcCSFcellArr_col{i,1} = 'failedTissueSeg';
 
-		cGMcellArr_col{i,1}  = 'N/A';
-		cWMcellArr_col{i,1}  = 'N/A';
-		cCSFcellArr_col{i,1} = 'N/A';
+		cGMcellArr_col{i,1}  = 'failedTissueSeg';
+		cWMcellArr_col{i,1}  = 'failedTissueSeg';
+		cCSFcellArr_col{i,1} = 'failedTissueSeg';
 
 		crtTempFailSeg{i,1} = subjid_arr{i,1};
 
@@ -82,13 +83,28 @@ end
 % ud2param.lists.crtTempFailSeg
 ud2param.lists.crtTempFailSeg = crtTempFailSeg(find(~cellfun(@isempty,crtTempFailSeg)));
 
+if ud2param.exe.verbose
+	fprintf ('%s : Note that %d subjects will be removed from creating DARTEL template because they failed tissue segmentation.\n', mfilename, ...
+						size (ud2param.lists.crtTempFailSeg,1));
+end
+
+% elements in ud2param.lists.subjs, but not in ud2param.lists.crtTempFailSeg
+% are those to be included in following analyses
+ud2param.lists.crtTempSucceedSeg = ud2param.lists.subjs(~ismember(ud2param.lists.subjs,ud2param.lists.crtTempFailSeg));
+
+if ud2param.exe.verbose
+	fprintf ('%s : The remaining %d subjects will be used to create DARTEL template.\n', mfilename, ...
+						size (ud2param.lists.crtTempSucceedSeg,1));
+end
+
+
 % deal with situations where there are segmentation failures
-rcGMcellArr_col_noFail  = rcGMcellArr_col  (~strcmp(rcGMcellArr_col, 'N/A'));
-rcWMcellArr_col_noFail  = rcWMcellArr_col  (~strcmp(rcWMcellArr_col, 'N/A'));
-rcCSFcellArr_col_noFail = rcCSFcellArr_col (~strcmp(rcCSFcellArr_col,'N/A'));
-cGMcellArr_col_noFail   = cGMcellArr_col   (~strcmp(cGMcellArr_col,  'N/A'));
-cWMcellArr_col_noFail   = cWMcellArr_col   (~strcmp(cWMcellArr_col,  'N/A'));
-cCSFcellArr_col_noFail  = cCSFcellArr_col  (~strcmp(cCSFcellArr_col, 'N/A'));
+rcGMcellArr_col_noFail  = rcGMcellArr_col  (~strcmp(rcGMcellArr_col, 'failedTissueSeg'));
+rcWMcellArr_col_noFail  = rcWMcellArr_col  (~strcmp(rcWMcellArr_col, 'failedTissueSeg'));
+rcCSFcellArr_col_noFail = rcCSFcellArr_col (~strcmp(rcCSFcellArr_col,'failedTissueSeg'));
+cGMcellArr_col_noFail   = cGMcellArr_col   (~strcmp(cGMcellArr_col,  'failedTissueSeg'));
+cWMcellArr_col_noFail   = cWMcellArr_col   (~strcmp(cWMcellArr_col,  'failedTissueSeg'));
+cCSFcellArr_col_noFail  = cCSFcellArr_col  (~strcmp(cCSFcellArr_col, 'failedTissueSeg'));
 
 [flowMapCellArr,...
           temp0,...
@@ -123,33 +139,47 @@ ud2param.templates.temp1_6{5,1} = fullfile(coh_temp_dir,'Template_5.nii');
 ud2param.templates.temp1_6{6,1} = fullfile(coh_temp_dir,'Template_6.nii');
 
 % generate cohort-specific prob maps
-wcGMcellArr  = cell (size(cGMcellArr_col_noFail));
-wcWMcellArr  = cell (size(cWMcellArr_col_noFail));
-wcCSFcellArr = cell (size(cCSFcellArr_col_noFail));
+wcGMcellArr  = cell (size (ud2param.lists.crtTempSucceedSeg));
+wcWMcellArr  = cell (size (ud2param.lists.crtTempSucceedSeg));
+wcCSFcellArr = cell (size (ud2param.lists.crtTempSucceedSeg));
 
-parfor (i = 1 : size(cGMcellArr_col_noFail,1), ud2param.exe.n_workers)
-	temp = [];
-	temp.exe.verbose = true;
-	wcGMcellArr{i,1}  = cns2_spmbatch_nativeToDARTEL (temp, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
-	wcWMcellArr{i,1}  = cns2_spmbatch_nativeToDARTEL (temp, cWMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
-	wcCSFcellArr{i,1} = cns2_spmbatch_nativeToDARTEL (temp, cCSFcellArr_col_noFail{i,1}, flowMapCellArr{i,1});
+wcCellArr_allIncFailSeg = cell (ud2param.n_subjs, 3); % wc1, wc2, and wc3 for all subjects including those failed seg in creating DARTEL.
+													  % to pass to wmh_ud2_preproc_dartel
+
+% parfor (i = 1 : size (ud2param.lists.crtTempSucceedSeg,1), ud2param.exe.n_workers)
+% 	wcGMcellArr{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
+% 	wcWMcellArr{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
+% 	wcCSFcellArr{i,1} = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col_noFail{i,1}, flowMapCellArr{i,1});
+% end
+
+
+parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
+	if isempty (crtTempFailSeg{i,1})
+		wcCellArr_allIncFailSeg{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
+		wcCellArr_allIncFailSeg{i,2}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
+		wcCellArr_allIncFailSeg{i,3}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col_noFail{i,1}, flowMapCellArr{i,1});
+	else
+		wcCellArr_allIncFailSeg{i,:} = {'failedTissueSeg','failedTissueSeg','failedTissueSeg'};
+	end
 end
 
-GMavg  = cns2_spmbatch_imgCal   (ud2param, ...
+wcGMcellArr{:,1} = wcCellArr_allIncFailSeg{i,1}  (~strcmp(rcGMcellArr_col, 'failedTissueSeg'));
+
+GMavg  = wmh_ud2_spmbatch_imgCal   (ud2param, ...
 									'avg', ...
 	                                 coh_temp_dir, ...
 	                                 'coh_GMprob', ...
 	                                 size(wcGMcellArr,1), ...
 	                                 wcGMcellArr);
 
-WMavg  = cns2_spmbatch_imgCal   (ud2param, ...
+WMavg  = wmh_ud2_spmbatch_imgCal   (ud2param, ...
 									'avg', ...
 	                                 coh_temp_dir, ...
 	                                 'coh_WMprob', ...
 	                                 size(wcWMcellArr,1), ...
 	                                 wcWMcellArr);
 
-CSFavg = cns2_spmbatch_imgCal   (ud2param, ...
+CSFavg = wmh_ud2_spmbatch_imgCal   (ud2param, ...
 									'avg', ...
 	                                 coh_temp_dir, ...
 	                                 'coh_CSFprob', ...
