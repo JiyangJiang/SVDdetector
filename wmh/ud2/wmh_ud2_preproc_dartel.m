@@ -1,5 +1,9 @@
 % varargin{1} = cell array of flow maps. 'creating' templates will generate
 %				flow maps in addition to Template 0-6.
+%
+% varargin{2} = wcCellArr_allIncFailSeg, i.e., wc1, wc2 and wc3 for all subjects
+%               including those failed segmentation in creating DARTEL templates.
+%               'failedTissueSeg' is assigned for these subjects.
 
 function wmh_ud2_preproc_dartel (ud2param,i,varargin)
 
@@ -7,10 +11,11 @@ wmh_ud2_preproc_dartel_startTime = tic;
 fprintf ('%s :\n', mfilename);
 fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 
-if nargin==3 && strcmp(ud2param.templates.options{1},'creating')
+if nargin==4 && strcmp(ud2param.templates.options{1},'creating')
 	flowmaps = varargin{1}; % creating templates will also generate flowmaps
 							% which are passed as a cell array in the 3rd
 							% argument.
+	wcCellArr_allIncFailSeg = varargin{2};
 end
 
 t1    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1.nii');
@@ -60,12 +65,33 @@ switch ud2param.templates.options{1}
 												ud2param.templates.temp1_6{6,1});
 
 		if ud2param.exe.verbose
+			fprintf ('%s : Calling wmh_ud2_spmbatch_nativeToDARTEL to apply flowmap to warp cGM, cWM, and cCSF to DARTEL space (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
+		end
+		wcGM    = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGM,    flowmap);
+		wcWM    = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWM,    flowmap);
+		wcCSF   = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSF,   flowmap);
+
+		if ud2param.exe.verbose
 			fprintf ('%s : wmh_ud2_spmbatch_runDARTELe finished (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 		end
 
 	case 'creating'
 
 		flowmap = flowmaps{i};
+
+		if ud2param.exe.verbose
+			fprintf ('%s : Since ''creating'' DARTEL templates is selected, cGM, cWM, and cCSF that have already been warped to DARTEL space when creating DARTEL templates will be directly used (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
+		end
+
+		wcGM  = wcCellArr_allIncFailSeg{i,1};
+		wcWM  = wcCellArr_allIncFailSeg{i,2};
+		wcCSF = wcCellArr_allIncFailSeg{i,3};
+
+		if (strcmp(wcGM,'failedTissueSeg')) || (strcmp(wcWM,'failedTissueSeg')) (strcmp(wcCSF,'failedTissueSeg')) 
+			ME = MException ('wmh_ud2_preproc_dartel:tissueSegFailed',...
+				'%s : Tissue segmentation failed when creating DARTEL templates. This subject was not included in creating cohort-specific templates. Since this may be due to T1w image issues, this subject is excluded from further analyses (subject ID = %s).', mfilename, ud2param.lists.subjs{i,1});
+			throw (ME);
+		end
 		
 end
 
@@ -74,14 +100,12 @@ end
 % bring t1, flair, gm, wm, csf to DARTEL space (create warped)
 % ============================================================
 if ud2param.exe.verbose
-	fprintf ('%s : Calling wmh_ud2_spmbatch_nativeToDARTEL to apply flowmap to warp T1, rFLAIR, cGM, cWM, and cCSF to DARTEL space (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
+	fprintf ('%s : Calling wmh_ud2_spmbatch_nativeToDARTEL to apply flowmap to warp T1 and rFLAIR to DARTEL space (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 end
 
 wt1     = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, t1,     flowmap);
 wrflair = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, rflair, flowmap);
-wcGM    = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGM,    flowmap);
-wcWM    = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWM,    flowmap);
-wcCSF   = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSF,   flowmap);
+
 
 if ud2param.exe.verbose
 	fprintf ('%s : Finished warping T1, rFLAIR, cGM, cWM, and cCSF to DARTEL space (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});

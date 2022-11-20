@@ -40,8 +40,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 
 		% creating template
 		if strcmp(ud2param.templates.options{1},'creating') % creating templates
-			[ud2param, flowmaps, ...
-			cGMcellArr_col_noFail, cWMcellArr_col_noFail, cCSFcellArr_col_noFail] = wmh_ud2_crtDartelTemp (ud2param);
+			[ud2param, flowMapCellArr, wcCellArr_allIncFailSeg] = wmh_ud2_crtDartelTemp (ud2param);
 		else
 			flowmaps = {}; % This had to be set. Otherwise, an error of unknown
 						   % 'flowmaps' will happen, although 'existing' is set.
@@ -58,9 +57,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 				    	wmh_ud2_preproc (ud2param,i);           	 % preprocessing (existing templates)
 					case 'creating'
 						if ismember (ud2param.lists.subjs{i,1}, ud2param.lists.crtTempSucceedSeg)
-							wmh_ud2_preproc (ud2param,i,flowmaps);  % preprocessing (creating templates - 
-																		 % flowmaps are generated during creating
-																		 % templates).
+							wmh_ud2_preproc (ud2param, i, flowmaps, wcCellArr_allIncFailSeg);
 						else
 							ME = MException ('wmh_ud2:crtTempFailSeg', ...
 							 '%s failed tissue segmentation during creating templates. The T1w image may have some issue. Therefore, %s is given all NaN values in the final output.', ud2param.lists.subjs{i,1}, ud2param.lists.subjs{i,1});

@@ -1,12 +1,17 @@
-% varargin{1} = cell array of flow maps. 'creating templates' will generate
+% varargin{1} = ud2param
+%
+% varargin{2} = i
+%
+% varargin{3} = cell array of flow maps. 'creating templates' will generate
 %				flow maps in addition to Template 0-6.
+%
 
 % switch flag
 %
 % 	case 'ud2'
 % 		standard UBO Detector 2 call
 % 		(ud2param,i) as input if using 'existing' templates
-% 		(ud2param,i,flowmaps) as input if using 'creating' templates
+% 		(ud2param,i,flowmaps, wcCellArr_allIncFailSeg) as input if using 'creating' templates
 %
 % 	case 'general'
 % 		wmh extracted from other software but full array of measures
@@ -70,7 +75,8 @@ switch flag
 					fprintf ('%s : wmh_ud2_spmbatch_runDARTELe finished (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 				end
 
-			case 'creating' && nargin==4 && strcmp(ud2param.templates.options{1},'creating')
+
+			case 'creating' && nargin==4
 
 				if ud2param.exe.verbose
 		    		fprintf ('%s : Using created DARTEL templates.\n', mfilename);
@@ -79,7 +85,9 @@ switch flag
 				flowmaps = varargin{3}; % creating templates will also generate flowmaps
 										% which are passed as a cell array in the 3rd
 										% argument.
+
 				flowmap = flowmaps{i};
+
 		end
 
 		% templates used in classification back to native space

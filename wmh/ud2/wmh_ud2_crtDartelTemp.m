@@ -1,5 +1,4 @@
-function [ud2param, flowMapCellArr, ...
-			cGMcellArr_col, cWMcellArr_col, cCSFcellArr_col] = wmh_ud2_crtDartelTemp (ud2param)
+function [ud2param, flowMapCellArr, wcCellArr_allIncFailSeg] = wmh_ud2_crtDartelTemp (ud2param)
 
 wmh_ud2_crtDartelTemp_startTime = tic;
 fprintf ('%s : \n', mfilename);
@@ -153,17 +152,24 @@ wcCellArr_allIncFailSeg = cell (ud2param.n_subjs, 3); % wc1, wc2, and wc3 for al
 % end
 
 
-parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
+% parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
+for i = 1 : ud2param.n_subjs
 	if isempty (crtTempFailSeg{i,1})
-		wcCellArr_allIncFailSeg{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
-		wcCellArr_allIncFailSeg{i,2}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
-		wcCellArr_allIncFailSeg{i,3}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col_noFail{i,1}, flowMapCellArr{i,1});
+		wcCellArr_allIncFailSeg{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col{i,1},  flowMapCellArr{i,1});
+		wcCellArr_allIncFailSeg{i,2}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col{i,1},  flowMapCellArr{i,1});
+		wcCellArr_allIncFailSeg{i,3}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col{i,1}, flowMapCellArr{i,1});
 	else
-		wcCellArr_allIncFailSeg{i,:} = {'failedTissueSeg','failedTissueSeg','failedTissueSeg'};
+		wcCellArr_allIncFailSeg(i,:) = {'failedTissueSeg','failedTissueSeg','failedTissueSeg'};
 	end
 end
 
-wcGMcellArr{:,1} = wcCellArr_allIncFailSeg{i,1}  (~strcmp(rcGMcellArr_col, 'failedTissueSeg'));
+[row, ~] = find (~strcmp (cGMcellArr_col, 'failedTissueSeg'));
+
+for i = 1 : size(row,1)
+	wcGMcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),1};
+	wcWMcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),2};
+	wcCSFcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),3};
+end
 
 GMavg  = wmh_ud2_spmbatch_imgCal   (ud2param, ...
 									'avg', ...

@@ -1,8 +1,12 @@
 clear;clc
 
-study_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\CNS2_example_data\ud2'; % Dell XPS 13
-svdd_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\SVDdetector'; % Dell XPS 13
-spm_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\spm12'; % Dell XPS 13
+% study_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\CNS2_example_data\ud2'; % Dell XPS 13
+% svdd_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\SVDdetector'; % Dell XPS 13
+% spm_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\spm12'; % Dell XPS 13
+
+study_dir = '/Users/z3402744/Documents/GitHub/example_data'; % Macbook Pro 13
+svdd_dir = '/Users/z3402744/Documents/GitHub/SVDdetector';
+spm_dir = '/Applications/spm12'
 
 n_workers = 2;
 save_dskspc = false;
