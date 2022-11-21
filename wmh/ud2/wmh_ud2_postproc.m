@@ -23,22 +23,21 @@ switch ud2param.classification.ext_space
 
 	case 'native'
 
-		% if extracting WMH in native space
-		% refer to example above 'dartel'
-		error ('%s : ''native'' space not implemented yet (line 24, wmh_ud2_postproc.m).\n', mfilename);
+		flair = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'flair_brn.nii');
+		t1    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1_flairSpc_brn.nii');
 
 end
 
 % preproc failure may result in error in finding flair/t1 for wmh segmentation
 if ~ isfile (flair)
-	ME = MException ('CNS2:postproc:preprocFlairNotFound', ...
+	ME = MException ('wmh_ud2_postproc:preprocFlairNotFound', ...
 					 '%s : %s''s preprocessed FLAIR is not found. This may be because preprocessing finished with ERROR.', ...
 					 mfilename, ...
 					 ud2param.lists.subjs{i,1});
 	throw (ME);
 end
 if ~ isfile (t1)
-	ME = MException ('CNS2:postproc:preprocT1NotFound', ...
+	ME = MException ('wmh_ud2_postproc:preprocT1NotFound', ...
 					 '%s : %s''s preprocessed T1 is not found. This may be because preprocessing finished with ERROR.', ...
 					 mfilename, ...
 					 ud2param.lists.subjs{i,1});

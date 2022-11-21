@@ -1,11 +1,9 @@
 % varargin{1} = cell array of flow maps. 'creating templates' will generate
 %				flow maps in addition to Template 0-6.
 %
-% varargin{2} = wcCellArr_allIncFailSeg, i.e., wc1, wc2 and wc3 for all subjects
-%               including those failed segmentation in creating DARTEL templates.
-%               'failedTissueSeg' is assigned for these subjects.
 
-function wmh_ud2_preproc (ud2param,i,varargin)
+
+function varargout = wmh_ud2_preproc (ud2param,i,varargin)
 
 wmh_ud2_preproc_startTime = tic;
 
@@ -41,20 +39,20 @@ switch ud2param.classification.ext_space
 					fprintf ('%s : Using created DARTEL templates.\n', mfilename);
 				end
 
-				if nargin==4
+				if nargin==3
 					flowmaps = varargin{1}; % creating templates will also generate flowmaps
 											% which are passed as a cell array in the 3rd
 											% argument.
-					wcCellArr_allIncFailSeg = varargin{2};
 
 					if ud2param.exe.verbose
 						fprintf ('%s : Calling wmh_ud2_preproc_dartel for preprocessing.\n', mfilename);
 					end
 
-					wmh_ud2_preproc_dartel (ud2param,i,flowmaps,wcCellArr_allIncFailSeg);
+					wmh_ud2_preproc_dartel (ud2param,i,flowmaps);
+
 				else
 					ME = MException ('wmh_ud2_preproc:incorrNumOfArguments', ...
-								 	 '''Creating templates'' should pass flowmaps and wcCellArr_allIncFailSeg to wmh_ud2_preproc.');
+								 	 '''Creating templates'' should pass flowmaps to wmh_ud2_preproc.');
 					throw (ME);
 				end
 		end
@@ -74,7 +72,9 @@ switch ud2param.classification.ext_space
 					fprintf ('%s : Calling wmh_ud2_preproc_native for preprocessing.\n', mfilename);
 				end
 
-				wmh_ud2_preproc_native ('ud2',ud2param,i);
+				ud2param = wmh_ud2_preproc_native ('ud2',ud2param,i);
+
+				varargout = ud2param;
 
 			case 'creating'
 
@@ -87,18 +87,17 @@ switch ud2param.classification.ext_space
 					flowmaps = varargin{1}; % creating templates will also generate flowmaps
 											% which are passed as a cell array in the 3rd
 											% argument.
-					wcCellArr_allIncFailSeg = varargin{2};
 
 					if ud2param.exe.verbose
 						fprintf ('%s : Calling wmh_ud2_preproc_native for preprocessing.\n', mfilename);
 					end
 
-					wmh_ud2_preproc_native ('ud2',ud2param,i,flowmaps,wcCellArr_allIncFailSeg);
+					wmh_ud2_preproc_native ('ud2',ud2param,i,flowmaps);
 
 				else
 
 					ME = MException ('CNS2:preproc:incorrNumInputCreatingTemp', ...
-								 	 '''Creating templates'' should pass flowmaps and wcCellArr_allIncFailSeg to wmh_ud2_preproc.');
+								 	 '''Creating templates'' should pass flowmaps to wmh_ud2_preproc.');
 					
 					throw (ME);
 

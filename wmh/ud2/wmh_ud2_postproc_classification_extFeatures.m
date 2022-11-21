@@ -11,14 +11,23 @@ if ud2param.exe.verbose && nargin==5
 end
 
 % load essential images
+if ud2param.exe.verbose
+	fprintf ('%s : Loading T1w and FLAIR images (subject ID = %s).\n', mfilename, subjid);
+end
 t1_dat    = spm_read_vols (spm_vol (t1));
 flair_dat = spm_read_vols (spm_vol (flair));
 t1_dat    (isnan(t1_dat))    =0;
 flair_dat (isnan(flair_dat)) =0;
 
+if ud2param.exe.verbose
+	fprintf ('%s : Loading GM and WM masks (subject ID = %s).\n', mfilename, subjid);
+end
 gmmsk_dat = spm_read_vols (spm_vol (ud2param.templates.gmmsk));
 wmmsk_dat = spm_read_vols (spm_vol (ud2param.templates.wmmsk));
 
+if ud2param.exe.verbose
+	fprintf ('%s : Loading GM, WM, and CSF probability maps, and ventricular distance map (subject ID = %s).\n', mfilename, subjid);
+end
 gmprob_dat  = spm_read_vols (spm_vol (ud2param.templates.gmprob));
 wmprob_dat  = spm_read_vols (spm_vol (ud2param.templates.wmprob));
 csfprob_dat = spm_read_vols (spm_vol (ud2param.templates.csfprob));
@@ -26,12 +35,18 @@ csfprob_dat = spm_read_vols (spm_vol (ud2param.templates.csfprob));
 ventdst_dat = spm_read_vols (spm_vol (ud2param.templates.ventdst));
 
 % mean intensities
+if ud2param.exe.verbose
+	fprintf ('%s : Calculating mean intensity of GM and WM on T1w and FLAIR (subject ID = %s).\n', mfilename, subjid);
+end
 meanInt_GMonT1    = mean(nonzeros(t1_dat    .* gmmsk_dat));
 meanInt_WMonT1    = mean(nonzeros(t1_dat    .* wmmsk_dat));
 meanInt_GMonFLAIR = mean(nonzeros(flair_dat .* gmmsk_dat));
 meanInt_WMonFLAIR = mean(nonzeros(flair_dat .* wmmsk_dat));
 
 % initialise feature table
+if ud2param.exe.verbose
+	fprintf ('%s : Initialising feature table (subject ID = %s).\n', mfilename, subjid);
+end
 Nclstrs = sum([lv2clstrs_struct(:).NumObjects]);
 
 f_names = {'1stLvClstrIdx'; '2ndLvClstrIdx'
@@ -93,6 +108,10 @@ case 'superpixel'
 end
 
 % extract features
+if ud2param.exe.verbose
+	fprintf ('%s : Start calculating features (subject ID = %s).\n', mfilename, subjid);
+end
+
 for i = 1 : Nlv1clstrs
 
 	lv2clstrs = labelmatrix (lv2clstrs_struct(i));
@@ -150,6 +169,10 @@ for i = 1 : Nlv1clstrs
 
 		f_tbl_rname{lin_idx,1} = [num2str(i) '_' num2str(j)];
 	end
+end
+
+if ud2param.exe.verbose
+	fprintf ('%s : Finished calculating features (subject ID = %s).\n', mfilename, subjid);
 end
 
 f_tbl.Properties.RowNames = f_tbl_rname;

@@ -2,7 +2,7 @@
 
 % other = ref space image that will be mapped to src space by reversing src-to-ref transformation.
 
-% varargin{1} = 'Tri' for trilinear interpolation. Default is nearest neighbour.
+% varargin{1} = 'Tri' for trilinear interpolation. Default is nearest neighbour. Values higher than 1 can also be specified (SPM default = 4).
 
 
 function varargout = wmh_ud2_scripts_revReg (ud2param, src, ref, other, varargin)
@@ -36,6 +36,8 @@ function varargout = wmh_ud2_scripts_revReg (ud2param, src, ref, other, varargin
 
     if nargin == 5 && strcmp (varargin{1}, 'Tri')
         interp = 1;
+    elseif nargin == 5 && isnumeric (varargin{1}) && varargin{1} > 1
+    	interp = varargin{1};
     elseif nargin == 4
         interp = 0; % nearest neighbour (default)
     end

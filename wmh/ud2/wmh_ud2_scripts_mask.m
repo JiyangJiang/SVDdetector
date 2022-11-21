@@ -20,6 +20,10 @@ end
 in_dat   = spm_read_vols (spm_vol (in));
 mask_dat = spm_read_vols (spm_vol (mask));
 
+% NaN -> 0
+in_dat(isnan(in_dat)) = 0;
+mask_dat(isnan(mask_dat)) = 0;
+
 % whether in and mask are of the same dimension
 if ~(size(in_dat,1)==size(mask_dat,1) && ...
 	 size(in_dat,2)==size(mask_dat,2) && ...

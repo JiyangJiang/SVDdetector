@@ -116,6 +116,7 @@ switch flag
 		wmprob_t1spc_resliced  = wmh_ud2_spmscripts_reslice (ud2param, t1, wmprob_t1spc,  1);
 		csfprob_t1spc_resliced = wmh_ud2_spmscripts_reslice (ud2param, t1, csfprob_t1spc, 1);
 		brnmsk_t1spc_resliced  = wmh_ud2_spmscripts_reslice (ud2param, t1, brnmsk_t1spc,  0);
+
 		% rename to avoid confusion with img resliced to FLAIR space
 		[gmmsk_t1spc_resliced_dir, gmmsk_t1spc_resliced_fname, gmmsk_t1spc_resliced_ext] = fileparts (gmmsk_t1spc_resliced);
 		[wmmsk_t1spc_resliced_dir, wmmsk_t1spc_resliced_fname, wmmsk_t1spc_resliced_ext] = fileparts (wmmsk_t1spc_resliced);
@@ -123,6 +124,7 @@ switch flag
 		[wmprob_t1spc_resliced_dir, wmprob_t1spc_resliced_fname, wmprob_t1spc_resliced_ext] = fileparts (wmprob_t1spc_resliced);
 		[csfprob_t1spc_resliced_dir, csfprob_t1spc_resliced_fname, csfprob_t1spc_resliced_ext] = fileparts (csfprob_t1spc_resliced);
 		[brnmsk_t1spc_resliced_dir, brnmsk_t1spc_resliced_fname, brnmsk_t1spc_resliced_ext] = fileparts (brnmsk_t1spc_resliced);
+
 		movefile (gmmsk_t1spc_resliced, fullfile (gmmsk_t1spc_resliced_dir, [gmmsk_t1spc_resliced_fname '_t1spc' gmmsk_t1spc_resliced_ext]));
 		movefile (wmmsk_t1spc_resliced, fullfile (wmmsk_t1spc_resliced_dir, [wmmsk_t1spc_resliced_fname '_t1spc' wmmsk_t1spc_resliced_ext]));
 		movefile (gmprob_t1spc_resliced, fullfile (gmprob_t1spc_resliced_dir, [gmprob_t1spc_resliced_fname '_t1spc' gmprob_t1spc_resliced_ext]));
@@ -140,12 +142,14 @@ switch flag
 																																							ud2param.lists.subjs{i,1});
 		end
 
-		gmmsk_flairSpc   = wmh_ud2_scripts_revReg (ud2param, flair, t1, gmmsk_t1spc,   'Tri');
-		wmmsk_flairSpc   = wmh_ud2_scripts_revReg (ud2param, flair, t1, wmmsk_t1spc,   'Tri');
-		gmprob_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, gmprob_t1spc,  'Tri');
-		wmprob_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, wmprob_t1spc,  'Tri');
-		csfprob_flairSpc = wmh_ud2_scripts_revReg (ud2param, flair, t1, csfprob_t1spc, 'Tri');
-		brnmsk_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, brnmsk_t1spc        );
+		gmmsk_flairSpc   = wmh_ud2_scripts_revReg (ud2param, flair, t1, gmmsk_t1spc,   4);
+		wmmsk_flairSpc   = wmh_ud2_scripts_revReg (ud2param, flair, t1, wmmsk_t1spc,   4);
+		gmprob_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, gmprob_t1spc,  4);
+		wmprob_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, wmprob_t1spc,  4);
+		csfprob_flairSpc = wmh_ud2_scripts_revReg (ud2param, flair, t1, csfprob_t1spc, 4);
+		brnmsk_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, brnmsk_t1spc    ); % default is nearest neighbour interpolation
+		t1_flairSpc      = wmh_ud2_scripts_revReg (ud2param, flair, t1, t1,            4);
+
 		% rename to avoid confusion with img resliced to T1 space
 		[gmmsk_flairSpc_dir, gmmsk_flairSpc_fname, gmmsk_flairSpc_ext] = fileparts (gmmsk_flairSpc);
 		[wmmsk_flairSpc_dir, wmmsk_flairSpc_fname, wmmsk_flairSpc_ext] = fileparts (wmmsk_flairSpc);
@@ -153,18 +157,23 @@ switch flag
 		[wmprob_flairSpc_dir, wmprob_flairSpc_fname, wmprob_flairSpc_ext] = fileparts (wmprob_flairSpc);
 		[csfprob_flairSpc_dir, csfprob_flairSpc_fname, csfprob_flairSpc_ext] = fileparts (csfprob_flairSpc);
 		[brnmsk_flairSpc_dir, brnmsk_flairSpc_fname, brnmsk_flairSpc_ext] = fileparts (brnmsk_flairSpc);
+		[t1_flairSpc_dir, t1_flairSpc_fname, t1_flairSpc_ext] = fileparts (t1_flairSpc);
+
 		movefile (gmmsk_flairSpc, fullfile (gmmsk_flairSpc_dir, [gmmsk_flairSpc_fname '_flairspc' gmmsk_flairSpc_ext]));
 		movefile (wmmsk_flairSpc, fullfile (wmmsk_flairSpc_dir, [wmmsk_flairSpc_fname '_flairspc' wmmsk_flairSpc_ext]));
 		movefile (gmprob_flairSpc, fullfile (gmprob_flairSpc_dir, [gmprob_flairSpc_fname '_flairspc' gmprob_flairSpc_ext]));
 		movefile (wmprob_flairSpc, fullfile (wmprob_flairSpc_dir, [wmprob_flairSpc_fname '_flairspc' wmprob_flairSpc_ext]));
 		movefile (csfprob_flairSpc, fullfile (csfprob_flairSpc_dir, [csfprob_flairSpc_fname '_flairspc' csfprob_flairSpc_ext]));
 		movefile (brnmsk_flairSpc, fullfile (brnmsk_flairSpc_dir, [brnmsk_flairSpc_fname '_flairspc' brnmsk_flairSpc_ext]));
+		movefile (t1_flairSpc, fullfile (t1_flairSpc_dir, [t1_flairSpc_fname '_flairspc' t1_flairSpc_ext]));
+
 		gmmsk_flairSpc = fullfile (gmmsk_flairSpc_dir, [gmmsk_flairSpc_fname '_flairspc' gmmsk_flairSpc_ext]);
 		wmmsk_flairSpc = fullfile (wmmsk_flairSpc_dir, [wmmsk_flairSpc_fname '_flairspc' wmmsk_flairSpc_ext]);
 		gmprob_flairSpc = fullfile (gmprob_flairSpc_dir, [gmprob_flairSpc_fname '_flairspc' gmprob_flairSpc_ext]);
 		wmprob_flairSpc = fullfile (wmprob_flairSpc_dir, [wmprob_flairSpc_fname '_flairspc' wmprob_flairSpc_ext]);
 		csfprob_flairSpc = fullfile (csfprob_flairSpc_dir, [csfprob_flairSpc_fname '_flairspc' csfprob_flairSpc_ext]);
 		brnmsk_flairSpc = fullfile (brnmsk_flairSpc_dir, [brnmsk_flairSpc_fname '_flairspc' brnmsk_flairSpc_ext]);
+		t1_flairSpc = fullfile (t1_flairSpc_dir, [t1_flairSpc_fname '_flairspc' t1_flairSpc_ext]);
 
 		delete (gmmsk_t1spc);
 		delete (wmmsk_t1spc);
@@ -191,9 +200,11 @@ switch flag
 		end
 
 		wmh_ud2_scripts_mask  (ud2param, flair, brnmsk_flairSpc, ...
-								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'flair_brn.nii'));
+								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'flair_brn.nii')); % mask flair-space flair
 		wmh_ud2_scripts_mask  (ud2param, t1, brnmsk_t1spc, ...
-								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1_brn.nii'));
+								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1_brn.nii')); % mask t1-space t1
+		wmh_ud2_scripts_mask  (ud2param, t1_flairSpc, brnmsk_flairSpc, ...
+								fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1_flairSpc_brn.nii')); % mask t1-space t1
 
 		if ud2param.exe.verbose
 			fprintf ('%s : Finished masking native T1 and FLAIR (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
@@ -215,6 +226,7 @@ switch flag
 		movefile (wmprob_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmprob_flairSpc.nii' ));
 		movefile (csfprob_flairSpc,fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'csfprob_flairSpc.nii'));
 		movefile (brnmsk_flairSpc, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'brnmsk_flairSpc.nii' ));
+		movefile (t1_flairSpc,     fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 't1_flairSpc.nii'     ));
 
 		% update ud2param
 		if ud2param.exe.verbose
@@ -259,13 +271,13 @@ switch flag
 		end
 
 		flowmap = wmh_ud2_spmbatch_runDARTELe (ud2param, ...
-											rcGM, rcWM, rcCSF, ...
-											fullfile(wmh_ud2_templates06_dir,'Template_1.nii'), ...
-											fullfile(wmh_ud2_templates06_dir,'Template_2.nii'), ...
-											fullfile(wmh_ud2_templates06_dir,'Template_3.nii'), ...
-											fullfile(wmh_ud2_templates06_dir,'Template_4.nii'), ...
-											fullfile(wmh_ud2_templates06_dir,'Template_5.nii'), ...
-											fullfile(wmh_ud2_templates06_dir,'Template_6.nii'));
+												rcGM, rcWM, rcCSF, ...
+												fullfile(wmh_ud2_templates06_dir,'Template_1.nii'), ...
+												fullfile(wmh_ud2_templates06_dir,'Template_2.nii'), ...
+												fullfile(wmh_ud2_templates06_dir,'Template_3.nii'), ...
+												fullfile(wmh_ud2_templates06_dir,'Template_4.nii'), ...
+												fullfile(wmh_ud2_templates06_dir,'Template_5.nii'), ...
+												fullfile(wmh_ud2_templates06_dir,'Template_6.nii'));
 
 		if ud2param.exe.verbose
 			fprintf ('%s : wmh_ud2_spmbatch_runDARTELe finished (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});

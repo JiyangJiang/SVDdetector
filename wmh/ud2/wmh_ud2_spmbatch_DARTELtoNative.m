@@ -6,7 +6,7 @@
 %   DARTELimg = image on DARTEL space that will be mapped back to native
 %   space
 %   flowMap = flow map of DARTELimg
-%   varargin {1} = 'NN' (nearest neighbours. By default, trilinear)
+%   varargin {1} = 'NN' (nearest neighbours. By default, 4th degree B-Spline)
 %
 % OUTPUT:
 %   NativeImg = DARTELimg on native space
@@ -37,10 +37,10 @@ function NativeImg = wmh_ud2_spmbatch_DARTELtoNative (ud2param, DARTELimg, flowM
 
     else
 
-        interp = 1;
+        interp = 4;
 
         if ud2param.exe.verbose
-            fprintf ('%s : Using trilinear interpolation.\n', mfilename);
+            fprintf ('%s : Using 4th degree B-Spline interpolation.\n', mfilename);
         end
 
     end

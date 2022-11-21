@@ -141,18 +141,18 @@ switch ud2param.templates.options{1}
     	
     	age_range = ud2param.templates.options{2};
 
-		ud2param.templates.temp1_6{1,1} = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_0to6_templates',age_range,'Template_1.nii');
-		ud2param.templates.temp1_6{2,1} = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_0to6_templates',age_range,'Template_2.nii');
-		ud2param.templates.temp1_6{3,1} = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_0to6_templates',age_range,'Template_3.nii');
-		ud2param.templates.temp1_6{4,1} = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_0to6_templates',age_range,'Template_4.nii');
-		ud2param.templates.temp1_6{5,1} = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_0to6_templates',age_range,'Template_5.nii');
-		ud2param.templates.temp1_6{6,1} = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_0to6_templates',age_range,'Template_6.nii');
-		ud2param.templates.brnmsk = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_brain_mask',age_range,'DARTEL_brain_mask.nii');
-        ud2param.templates.gmmsk = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_GM_prob_map_thr0_8.nii');
-        ud2param.templates.wmmsk = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_WM_prob_map_thr0_8.nii');
-        ud2param.templates.gmprob = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_GM_prob_map.nii');
-        ud2param.templates.wmprob = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_WM_prob_map.nii');
-        ud2param.templates.csfprob = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_CSF_prob_map.nii');
+		ud2param.templates.temp1_6{1,1} = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_0to6_templates',age_range,'Template_1.nii');
+		ud2param.templates.temp1_6{2,1} = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_0to6_templates',age_range,'Template_2.nii');
+		ud2param.templates.temp1_6{3,1} = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_0to6_templates',age_range,'Template_3.nii');
+		ud2param.templates.temp1_6{4,1} = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_0to6_templates',age_range,'Template_4.nii');
+		ud2param.templates.temp1_6{5,1} = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_0to6_templates',age_range,'Template_5.nii');
+		ud2param.templates.temp1_6{6,1} = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_0to6_templates',age_range,'Template_6.nii');
+		ud2param.templates.brnmsk = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_brain_mask',age_range,'DARTEL_brain_mask.nii');
+        ud2param.templates.gmmsk = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_GM_prob_map_thr0_8.nii');
+        ud2param.templates.wmmsk = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_WM_prob_map_thr0_8.nii');
+        ud2param.templates.gmprob = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_GM_prob_map.nii');
+        ud2param.templates.wmprob = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_WM_prob_map.nii');
+        ud2param.templates.csfprob = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_GM_WM_CSF_prob_maps',age_range,'DARTEL_CSF_prob_map.nii');
 
     case 'creating'
 
@@ -172,9 +172,9 @@ switch ud2param.templates.options{1}
 
 end
 
-ud2param.templates.ventdst  = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_ventricle_distance_map',       'DARTEL_ventricle_distance_map.nii');
-ud2param.templates.lobar    = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_lobar_and_arterial_templates', 'DARTEL_lobar_template.nii');
-ud2param.templates.arterial = fullfile (ud2param.dirs.svdd, 'wmh', 'templates','DARTEL_lobar_and_arterial_templates', 'DARTEL_arterial_template.nii');
+ud2param.templates.ventdst  = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_ventricle_distance_map',       'DARTEL_ventricle_distance_map.nii');
+ud2param.templates.lobar    = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_lobar_and_arterial_templates', 'DARTEL_lobar_template.nii');
+ud2param.templates.arterial = fullfile (ud2param.dirs.svdd, 'templates','DARTEL_lobar_and_arterial_templates', 'DARTEL_arterial_template.nii');
 
 if ud2param.exe.verbose
 	fprintf ('%s : ++++++++++++++++++++++++++++++ Templates +++++++++++++++++++++++++++\n', mfilename);

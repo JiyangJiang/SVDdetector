@@ -145,31 +145,31 @@ wcCSFcellArr = cell (size (ud2param.lists.crtTempSucceedSeg));
 wcCellArr_allIncFailSeg = cell (ud2param.n_subjs, 3); % wc1, wc2, and wc3 for all subjects including those failed seg in creating DARTEL.
 													  % to pass to wmh_ud2_preproc_dartel
 
-% parfor (i = 1 : size (ud2param.lists.crtTempSucceedSeg,1), ud2param.exe.n_workers)
-% 	wcGMcellArr{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
-% 	wcWMcellArr{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
-% 	wcCSFcellArr{i,1} = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col_noFail{i,1}, flowMapCellArr{i,1});
-% end
+parfor (i = 1 : size (ud2param.lists.crtTempSucceedSeg,1), ud2param.exe.n_workers)
+	wcGMcellArr{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
+	wcWMcellArr{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col_noFail{i,1},  flowMapCellArr{i,1});
+	wcCSFcellArr{i,1} = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col_noFail{i,1}, flowMapCellArr{i,1});
+end
 
 
 % parfor (i = 1 : ud2param.n_subjs, ud2param.exe.n_workers)
-for i = 1 : ud2param.n_subjs
-	if isempty (crtTempFailSeg{i,1})
-		wcCellArr_allIncFailSeg{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col{i,1},  flowMapCellArr{i,1});
-		wcCellArr_allIncFailSeg{i,2}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col{i,1},  flowMapCellArr{i,1});
-		wcCellArr_allIncFailSeg{i,3}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col{i,1}, flowMapCellArr{i,1});
-	else
-		wcCellArr_allIncFailSeg(i,:) = {'failedTissueSeg','failedTissueSeg','failedTissueSeg'};
-	end
-end
+% for i = 1 : ud2param.n_subjs
+% 	if isempty (crtTempFailSeg{i,1})
+% 		wcCellArr_allIncFailSeg{i,1}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cGMcellArr_col{i,1},  flowMapCellArr{i,1});
+% 		wcCellArr_allIncFailSeg{i,2}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cWMcellArr_col{i,1},  flowMapCellArr{i,1});
+% 		wcCellArr_allIncFailSeg{i,3}  = wmh_ud2_spmbatch_nativeToDARTEL (ud2param, cCSFcellArr_col{i,1}, flowMapCellArr{i,1});
+% 	else
+% 		wcCellArr_allIncFailSeg(i,:) = {'failedTissueSeg','failedTissueSeg','failedTissueSeg'};
+% 	end
+% end
 
-[row, ~] = find (~strcmp (cGMcellArr_col, 'failedTissueSeg'));
+% [row, ~] = find (~strcmp (cGMcellArr_col, 'failedTissueSeg'));
 
-for i = 1 : size(row,1)
-	wcGMcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),1};
-	wcWMcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),2};
-	wcCSFcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),3};
-end
+% for i = 1 : size(row,1)
+% 	wcGMcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),1};
+% 	wcWMcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),2};
+% 	wcCSFcellArr{i,1} = wcCellArr_allIncFailSeg{row(i),3};
+% end
 
 GMavg  = wmh_ud2_spmbatch_imgCal   (ud2param, ...
 									'avg', ...
@@ -195,6 +195,33 @@ CSFavg = wmh_ud2_spmbatch_imgCal   (ud2param, ...
 ud2param.templates.gmprob  = GMavg;
 ud2param.templates.wmprob  = WMavg;
 ud2param.templates.csfprob = CSFavg;
+
+% brainmask, GMmask, WMmask in sample-specific DARTEL space
+if ud2param.exe.verbose
+	fprintf ('%s : Generating brainmask, GM mask, and WM mask in sample-specific DARTEL space.\n', mfilename);
+end
+
+gm_avg  = spm_read_vols (spm_vol (ud2param.templates.gmprob));
+wm_avg  = spm_read_vols (spm_vol (ud2param.templates.wmprob));
+csf_avg = spm_read_vols (spm_vol (ud2param.templates.csfprob));
+
+brainmask = gm_avg + wm_avg + csf_avg;
+brainmask (brainmask >  0.8) = 1; % threshold prob at 0.8 to generate brainmask
+brainmask (brainmask <= 0.8) = 0;
+wmh_ud2_scripts_writeNii (ud2param, spm_vol(ud2param.templates.gmprob), brainmask, fullfile (coh_temp_dir, 'coh_brainmask.nii'));
+ud2param.templates.brnmsk = fullfile (coh_temp_dir, 'coh_brainmask.nii');
+
+gm_mask = gm_avg;
+gm_mask (gm_mask >  0.8) = 1; % threshold at 0.8
+gm_mask (gm_mask <= 0.8) = 0;
+wmh_ud2_scripts_writeNii (ud2param, spm_vol(ud2param.templates.gmprob), gm_mask, fullfile (coh_temp_dir, 'coh_GMmask.nii'));
+ud2param.templates.gmmsk = fullfile (coh_temp_dir, 'coh_GMmask.nii');
+
+wm_mask = wm_avg;
+wm_mask (wm_mask >  0.8) = 1; % threshold at 0.8
+wm_mask (wm_mask <= 0.8) = 0;
+wmh_ud2_scripts_writeNii (ud2param, spm_vol(ud2param.templates.gmprob), wm_mask, fullfile (coh_temp_dir, 'coh_WMmask.nii'));
+ud2param.templates.wmmsk = fullfile (coh_temp_dir, 'coh_WMmask.nii');
 
 wmh_ud2_crtDartelTemp_finishTime = toc (wmh_ud2_crtDartelTemp_startTime);
 fprintf ('%s : Finished (%s; %.4f seconds elapsed).\n', mfilename, string(datetime), wmh_ud2_crtDartelTemp_finishTime);
