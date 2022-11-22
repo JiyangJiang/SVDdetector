@@ -110,7 +110,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 
 					case 'native'
 
-						quant_tbl_subj = wmh_ud2_postproc (ud2param_nat,i);
+						quant_tbl_subj = wmh_ud2_postproc (ud2param_nat, i);
 				end
 
 

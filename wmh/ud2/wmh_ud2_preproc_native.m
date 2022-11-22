@@ -76,17 +76,27 @@ switch flag
 				end
 
 
-			case 'creating' && nargin==4
+			case 'creating'
 
-				if ud2param.exe.verbose
-		    		fprintf ('%s : Using created DARTEL templates.\n', mfilename);
+				if nargin==4
+
+					if ud2param.exe.verbose
+			    		fprintf ('%s : Using created DARTEL templates.\n', mfilename);
+					end
+
+					flowmaps = varargin{3}; % creating templates will also generate flowmaps
+											% which are passed as a cell array in the 3rd
+											% argument.
+
+					flowmap = flowmaps{i};
+
+				else
+
+					ME = MException ('wmh_ud2_preproc_native:incorrNumInputs', ...
+							'%s : Wrong number of inputs ''ud2'' mode ''creating'' templates should have 4 argument inputs, flag, ud2param, i, and flowmaps. Currently %d inputs.\n', mfilename, nargin);
+					throw (ME);
+
 				end
-
-				flowmaps = varargin{3}; % creating templates will also generate flowmaps
-										% which are passed as a cell array in the 3rd
-										% argument.
-
-				flowmap = flowmaps{i};
 
 		end
 
@@ -230,14 +240,15 @@ switch flag
 
 		% update ud2param
 		if ud2param.exe.verbose
+			fprintf ('%s : Clear NaN and negative values for GM/WM masks, GM/WM/CSF probability maps, and brain mask (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1})
 			fprintf ('%s : Updading ud2param.templates to use FLAIR-space GM/WM/brain masks and GM/WM/CSF probability maps (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 		end
-		ud2param.templates.gmmsk   = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmmsk_flairSpc.nii'  );
-		ud2param.templates.wmmsk   = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmmsk_flairSpc.nii'  );
-		ud2param.templates.gmprob  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmprob_flairSpc.nii' );
-		ud2param.templates.wmprob  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmprob_flairSpc.nii' );
-		ud2param.templates.csfprob = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'csfprob_flairSpc.nii');
-		ud2param.templates.brnmsk  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'brnmsk_flairSpc.nii' );
+		ud2param.templates.gmmsk   = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmmsk_flairSpc.nii'  ), 'overwrite');
+		ud2param.templates.wmmsk   = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmmsk_flairSpc.nii'  ), 'overwrite');
+		ud2param.templates.gmprob  = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'gmprob_flairSpc.nii' ), 'overwrite');
+		ud2param.templates.wmprob  = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'wmprob_flairSpc.nii' ), 'overwrite');
+		ud2param.templates.csfprob = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'csfprob_flairSpc.nii'), 'overwrite');
+		ud2param.templates.brnmsk  = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'brnmsk_flairSpc.nii' ), 'overwrite');
 
 
 	case 'general' % ==> need to test (31/10/2022)
@@ -305,9 +316,9 @@ if ud2param.exe.verbose
 																																					ud2param.lists.subjs{i,1});
 end
 
-ventdst_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, ventdst_t1spc,   'Tri');
-lobar_flairSpc    = wmh_ud2_scripts_revReg (ud2param, flair, t1, lobar_t1spc           );
-arterial_flairSpc = wmh_ud2_scripts_revReg (ud2param, flair, t1, arterial_t1spc        );
+ventdst_flairSpc  = wmh_ud2_scripts_revReg (ud2param, flair, t1, ventdst_t1spc,   4);
+lobar_flairSpc    = wmh_ud2_scripts_revReg (ud2param, flair, t1, lobar_t1spc       );
+arterial_flairSpc = wmh_ud2_scripts_revReg (ud2param, flair, t1, arterial_t1spc    );
 
 if ud2param.exe.verbose
 	fprintf ('%s : Finish reverse registering ventricular distance map, lobar atlas, and arterial territory atlas from native T1 to native FLAIR space (subject ID = %s).\n', mfilename, ...
@@ -329,9 +340,9 @@ movefile (arterial_flairSpc,fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{
 if ud2param.exe.verbose
 	fprintf ('%s : Updading ud2param.templates to use FLAIR-space ventricular distance map, lobar atlas, and arterial territory atlas (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 end
-ud2param.templates.ventdst  = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'ventdst_flairSpc.nii' );
-ud2param.templates.lobar    = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'lobar_flairSpc.nii'   );
-ud2param.templates.arterial = fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'arterial_flairSpc.nii');
+ud2param.templates.ventdst  = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'ventdst_flairSpc.nii' ), 'overwrite');
+ud2param.templates.lobar    = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'lobar_flairSpc.nii'   ), 'overwrite');
+ud2param.templates.arterial = wmh_ud2_scripts_clearNanAndNeg (ud2param, fullfile (ud2param.dirs.subjs, ud2param.lists.subjs{i,1}, 'wmh', 'ud2', 'preproc', 'arterial_flairSpc.nii'), 'overwrite');
 
 
 wmh_ud2_preproc_native_finishTime = toc (wmh_ud2_preproc_native_startTime);

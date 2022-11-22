@@ -72,9 +72,8 @@ switch ud2param.classification.ext_space
 					fprintf ('%s : Calling wmh_ud2_preproc_native for preprocessing.\n', mfilename);
 				end
 
-				ud2param = wmh_ud2_preproc_native ('ud2',ud2param,i);
+				varargout{1} = wmh_ud2_preproc_native ('ud2',ud2param,i); % function return ud2param
 
-				varargout = ud2param;
 
 			case 'creating'
 
@@ -92,7 +91,7 @@ switch ud2param.classification.ext_space
 						fprintf ('%s : Calling wmh_ud2_preproc_native for preprocessing.\n', mfilename);
 					end
 
-					wmh_ud2_preproc_native ('ud2',ud2param,i,flowmaps);
+					varargout{1} = wmh_ud2_preproc_native ('ud2',ud2param,i,flowmaps); % function return ud2param
 
 				else
 

@@ -7,4 +7,8 @@ SVDdetector is a set of MATLAB-based pipelines to segment MRI markers of cerebra
 - cerebral microbleeds
 - recent small subcortical infarcts
 
-SPM12 functions are heavily used in SVDdetector. It is currently work-in-progress.
+Click each module folder for more details.
+
+## Release notes
+
+## Citation
