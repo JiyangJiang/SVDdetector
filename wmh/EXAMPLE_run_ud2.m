@@ -13,9 +13,9 @@ save_dskspc = false;
 save_more_dskspc = false;
 verbose = true;
 
-temp_opt = {'existing'; '65to75'}; % options = {'existing'; '65to75'}, {'exsiting'; '70to80'}, or {'creating'}
+temp_opt = {'creating'}; % options = {'existing'; '65to75'}, {'exsiting'; '70to80'}, or {'creating'}
 
-lv1clstMethod = 'kmeans'; % options = 'kmeans', 'superpixel', or 'fslfast' (in development)
+lv1clstMethod = 'kmeans'; % options = 'kmeans', 'superpixels', or 'fslfast' (in development)
 k4kmeans = 6;
 k4knn    = 5;
 n4superpixel = 5000;

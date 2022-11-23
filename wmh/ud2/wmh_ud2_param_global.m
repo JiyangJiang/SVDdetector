@@ -1,4 +1,3 @@
-
 function ud2param = wmh_ud2_param_global (study_dir, ...
 					             svdd_dir, ...
 					             spm_dir, ...
@@ -52,6 +51,11 @@ case 'mac'
 	ud2param.exe.unix_cmd_compatible = true;
 	tmp_word = 'compatible';
 end
+
+% ==================================================================
+% Consider memory usage in the future, especially when superpixels.
+% Use MATLAB memory function.
+% ==================================================================
 
 if ud2param.exe.verbose
 	fprintf ('%s : ++++++++ Execution options and host info ++++++++++\n', mfilename);

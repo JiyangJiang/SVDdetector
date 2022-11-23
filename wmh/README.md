@@ -20,6 +20,9 @@ The WMH module in SVDdetector is based on 2 pipelines:
 
 ## Installation
 
+### Using FSL FAST
+If FSL FAST is to be used for generating 1st level clusters (i.e., the method described in the original UBO Detector methodology paper), make sure MATLAB is FSL-aware. Refer to the [FSL MATLAB Configuration link](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation/FslMatlabConfiguration) to set up startup.m.
+
 ## Data preparation
 
 ## How to use UBO Detector 2?

@@ -33,6 +33,16 @@ if ud2param.exe.verbose
 	fprintf ('%s : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n', mfilename);
 end
 
+if strcmp (ud2param.classification.lv1clstr_method, 'superpixels')
+	warning ('%s : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+	warning ('%s : WMH will be extracted with ''superpixels'' method to construct 1st level clusters. This may use a large amount of memory. Consider using kmeans.');
+end
+
+if strcmp (extSpace, 'native')
+	warning ('%s : Extracting WMH in ''native'' space may take a few hours. Consider extraction in ''dartel'' space.\n', mfilename);
+	warning ('%s : +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+end
+
 % quantification
 % ++++++++++++++++++++++++++++++++++++++++++
 ud2param.quantification.pvmag  = pvmag;  % distance from lateral ventricle - used to define PVWMH and DWMH.

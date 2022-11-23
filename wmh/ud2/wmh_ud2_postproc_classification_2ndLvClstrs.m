@@ -19,7 +19,7 @@ end
 switch ud2param.classification.lv1clstr_method
 	case 'kmeans'
 		Nlv1clstrs = ud2param.classification.k4kmeans;
-	case 'superpixel'
+	case 'superpixels'
 		Nlv1clstrs = ud2param.classification.n4superpixel_actual;
 end
 

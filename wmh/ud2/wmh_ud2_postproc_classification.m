@@ -14,12 +14,19 @@ end
 % 1st-level clusters
 % ++++++++++++++++++
 if ud2param.exe.verbose
+	fprintf ('%s : Perform bias field correction before 1st level clustering.\n', mfilename);
+end
+
+[basFieldCorr_flair, ~] = wmh_ud2_spmbatch_corrBiasField (ud2param, flair);
+
+
+if ud2param.exe.verbose
 	fprintf ('%s : Calling wmh_ud2_postproc_classification_1stLvClstrs for 1st-level clustering (subject ID = %s).\n', mfilename, ud2param.lists.subjs{i,1});
 	fprintf ('%s : ''%s'' will be used for 1st-level clustering (subject ID = %s).\n', mfilename, ud2param.classification.lv1clstr_method, ud2param.lists.subjs{i,1});
 end
 
 [lv1clstrs_dat,ud2param] = wmh_ud2_postproc_classification_1stLvClstrs (ud2param, ...
-																		 flair, ...
+																		 basFieldCorr_flair, ...
 																		 fullfile (ud2param.dirs.subjs, ...
 																		 		   ud2param.lists.subjs{i,1}, ...
 																		 		   'wmh', 'ud2', ...

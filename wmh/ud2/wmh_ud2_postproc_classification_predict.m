@@ -39,7 +39,7 @@ end
 switch ud2param.classification.lv1clstr_method
 case 'kmeans'
 	Nlv1clstrs = ud2param.classification.k4kmeans;
-case 'superpixel'
+case 'superpixels'
 	Nlv1clstrs = ud2param.classification.n4superpixel_actual;
 end
 
@@ -52,7 +52,7 @@ for i = 1 : Nlv1clstrs
 	switch ud2param.classification.lv1clstr_method
 	case 'kmeans'
 		Nlv2clstrs = lv2clstrs_struct(i).NumObjects;
-	case 'superpixel'
+	case 'superpixels'
 		Nlv2clstrs = 1;
 	end
 
