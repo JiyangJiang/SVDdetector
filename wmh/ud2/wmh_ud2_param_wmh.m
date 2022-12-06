@@ -2,7 +2,7 @@
 function ud2param = wmh_ud2_param_wmh (ud2param, ...
 							lv1clstMethod, ...
 						    k4kmeans, ...
-						    n4superpixel, ...
+						    n4superpixels, ...
 						    k4knn, ...
 						    probthr, ...
 						    extSpace, ...
@@ -17,7 +17,7 @@ fprintf ('%s : Started (%s).\n', mfilename, string(datetime));
 % +++++++++++++++++++++++++++++++++++++++++++++
 ud2param.classification.lv1clstr_method = lv1clstMethod;
 ud2param.classification.k4kmeans        = k4kmeans;
-ud2param.classification.n4superpixel    = n4superpixel;
+ud2param.classification.n4superpixels    = n4superpixels;
 ud2param.classification.k4knn           = k4knn;
 ud2param.classification.probthr         = probthr;
 ud2param.classification.ext_space       = extSpace;
@@ -26,7 +26,7 @@ if ud2param.exe.verbose
 	fprintf ('%s : ++++++++++++++++++++++ Parameters for classification ++++++++++++++++++++++\n', mfilename);
 	fprintf ('%s : Level 1 cluterisation method (ud2param.ud.classification.lv1clstr_method) is set to ''%s''.\n', mfilename, lv1clstMethod);
 	fprintf ('%s : Number of clusters (k) for k-means clustering (ud2param.ud.classification.k4kmeans) is set to %d.\n', mfilename, k4kmeans);
-	fprintf ('%s : Number of superpixels (N) for superpixel oversegmentation (ud2param.ud.classification.n4superpixel) is set to %d.\n', mfilename, n4superpixel);
+	fprintf ('%s : Number of superpixels (N) for superpixel oversegmentation (ud2param.ud.classification.n4superpixels) is set to %d.\n', mfilename, n4superpixels);
 	fprintf ('%s : Number of neighbours (k) for k-NN (ud2param.ud.classification.k4knn) is set to %d.\n', mfilename, k4knn);
 	fprintf ('%s : Probability threshold (ud2param.ud.classification.probthr) is set to %.2f.\n', mfilename, probthr);
 	fprintf ('%s : WMH extraction will be done in ''%s'' space (ud2param.ud.classification.ext_space).\n', mfilename, extSpace);

@@ -4,7 +4,7 @@ if ud2param.exe.verbose
 	fprintf ('%s : Using superpixes to generate 1st-level clusters.\n', mfilename);
 end
 
-[lv1clstrs_dat,Nlabels] = superpixels3 (dat, ud2param.classification.n4superpixel);
+[lv1clstrs_dat,Nlabels] = superpixels3 (dat, ud2param.classification.n4superpixels);
 
 
 % exclude superpixel regions with mean intensity in the bottom 95%

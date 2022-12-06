@@ -1,6 +1,54 @@
-function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
-					n_workers, save_dskspc, save_more_dskspc, verbose, temp_opt, ...
-						lv1clstMethod, k4kmeans, k4knn, n4superpixel, probthr, extSpace, pvmag, sizthr_mm3)
+function wmh_ud2 (study_dir, svdd_dir, spm_dir, varargin)
+
+	p = inputParser;
+	
+	% validation functions
+	num_avail_cores = feature ('numcores');
+	validNumWorkers = @(x) isnumeric(x) && (x>0) && (x<num_avail_cores);
+	validTemp_opt = @(x)(strcmp(x{1},'creating')||strcmp(x{1},'existing'))&&(strcmp(x{2},'65to75')||strcmp(x{2},'70to80'))*(size(x,1)==2);
+	validLv1clstMethod = @(x) (strcmp(x,'kmeans') || strcmp(x,'superpixels') || strcmp(x,'fslfast'));
+	validProbthr = @(x) isnumeric(x) && (x > 0) && (x <= 1);
+	validExtSpace = @(x) strcmp(x,'dartel') || strcmp(x,'native');
+
+	addRequired  (p, 'study_dir', 										@isfolder);
+	addRequired  (p, 'svdd_dir',										@isfolder);
+	addRequired  (p, 'spm_dir',											@isfolder);
+
+	addParameter (p, 'N_workers', 			num_avail_cores, 			validNumWorkers);
+	addParameter (p, 'Save_dskspc', 		false, 						@islogical);
+	addParameter (p, 'Save_more_dskspc',	false,						@islogical);
+	addParameter (p, 'Verbose',				true,						@islogical);
+	addParameter (p, 'Temp_opt',			{'existing'; '65to75'},		validTemp_opt);
+	addParameter (p, 'Lv1clstMethod',		'kmeans',					validLv1clstMethod);
+	addParameter (p, 'K4kmeans',			6,							@isnumeric);
+	addParameter (p, 'K4knn',				5,							@isnumeric);
+	addParameter (p, 'N4superpixels',		5000,						@isnumeric);
+	addParameter (p, 'Probthr',				0.7,						validProbthr);
+	addParameter (p, 'ExtSpace',			'dartel',					validExtSpace);
+	addParameter (p, 'Pvmag',				12,							@isnumeric);
+	addParameter (p, 'Sizthr_mm3',			[10.125 30.375 50.625],		@isnumeric);
+
+
+	parse (p, study_dir, svdd_dir, spm_dir, varargin{:});
+
+	study_dir			= p.Results.study_dir;
+	svdd_dir			= p.Results.svdd_dir;
+	spm_dir 			= p.Results.spm_dir;
+
+	n_workers   		= p.Results.N_workers;
+	save_dskspc 		= p.Results.Save_dskspc;
+	save_more_dskspc 	= p.Results.Save_more_dskspc;
+	verbose				= p.Results.Verbose;
+	temp_opt			= p.Results.Temp_opt;
+	lv1clstMethod 		= p.Results.Lv1clstMethod;
+	k4kmeans			= p.Results.K4kmeans;
+	k4knn				= p.Results.K4knn;
+	n4superpixels		= p.Results.N4superpixels;
+	probthr 			= p.Results.Probthr;
+	extSpace 			= p.Results.ExtSpace;
+	pvmag				= p.Results.Pvmag;
+	sizthr_mm3			= p.Results.Sizthr_mm3;
+
 
 	svdd_wmh_dir = fullfile(svdd_dir,'wmh');
 	addpath (svdd_wmh_dir, spm_dir);
@@ -25,7 +73,7 @@ function wmh_ud2 (study_dir, svdd_dir, spm_dir, ...
 		ud2param = wmh_ud2_param_wmh  (ud2param, ...
 										lv1clstMethod, ...
 									    k4kmeans, ...
-									    n4superpixel, ...
+									    n4superpixels, ...
 									    k4knn, ...
 									    probthr, ...
 									    extSpace, ...
