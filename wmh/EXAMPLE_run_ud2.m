@@ -1,16 +1,18 @@
 clear;clc
 
-% study_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\CNS2_example_data\ud2'; % Dell XPS 13
-% svdd_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\SVDdetector'; % Dell XPS 13
-% spm_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\spm12'; % Dell XPS 13
+study_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\ud2_example_data\ud2'; % Dell XPS 13
+svdd_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\SVDdetector'; % Dell XPS 13
+spm_dir = 'C:\Users\z3402744\OneDrive - UNSW\previously on onedrive\Documents\GitHub\spm12'; % Dell XPS 13
 
 % study_dir = '/data1/work/SVDdetector';            % TP-W530
 % svdd_dir  = '/home/jiyang/GitHub/SVDdetector';
 % spm_dir   = '/home/jiyang/Software/spm12';
 
-study_dir = '/Users/z3402744/Documents/GitHub/example_data'; % Macbook Pro 13
-svdd_dir = '/Users/z3402744/Documents/GitHub/SVDdetector';
-spm_dir = '/Users/z3402744/Software/spm12';
+% study_dir = '/Users/z3402744/Documents/GitHub/example_data'; % Macbook Pro 13
+% svdd_dir = '/Users/z3402744/Documents/GitHub/SVDdetector';
+% spm_dir = '/Users/z3402744/Software/spm12';
+
+addpath (fullfile (svdd_dir, 'wmh', 'ud2'));
 
 n_workers = 2;
 save_dskspc = false;
@@ -32,4 +34,4 @@ sizthr_mm3 = [10.125 30.375 50.625]; % size thresholds in mm^3 to separate punct
 									 % [10.125 30.375 50.625] corresponds to 3, 9 and 15 voxels in DARTEL space.
 
 % run ud2
-wmh_ud2 (study_dir, svdd_dir, spm_dir, 'Lv1clstMethod', 'superpixels');
+wmh_ud2 (study_dir, svdd_dir, spm_dir);
