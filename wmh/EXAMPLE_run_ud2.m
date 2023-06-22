@@ -33,5 +33,5 @@ addpath (fullfile (svdd_dir, 'wmh', 'ud2'));
 % sizthr_mm3 = [10.125 30.375 50.625]; % size thresholds in mm^3 to separate punctuate, focal, medium, confluent WMH clusters.
 									 % [10.125 30.375 50.625] corresponds to 3, 9 and 15 voxels in DARTEL space.
 
-% run ud2
-wmh_ud2 (study_dir, svdd_dir, spm_dir);
+
+wmh_ud2 (study_dir, svdd_dir, spm_dir); % run ud2
